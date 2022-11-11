@@ -543,12 +543,12 @@ db.header_pad = 6
 
 db.custom_center = {
       {icon = '  ',
-      desc = 'Recently latest session                 ',
+      desc = 'Open latest session                     ',
       shortcut = 'SPC s l',
       action ='SessionLoad'},
       {icon = '  ',
       desc = 'Recently opened files                   ',
-      action =  'DashboardFindHistory',
+      action =  'Telescope oldfiles',
       shortcut = 'SPC f o'},
       {icon = '  ',
       desc = 'Find File                               ',
