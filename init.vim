@@ -49,6 +49,7 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 " Orgmode
 Plug 'nvim-orgmode/orgmode'
+Plug 'dhruvasagar/vim-table-mode'
 
 " Dashboard
 Plug 'glepnir/dashboard-nvim'
