@@ -161,11 +161,11 @@ nnoremap <A-Right> <C-w>l
 
 " Lsp
 nnoremap <leader>lx <cmd>lua vim.lsp.buf.declaration()<CR>
-nnoremap <leader>ld <cmd>lua vim.lsp.buf.definition()<CR>
-nnoremap <leader>li <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <leader>ld <cmd>Telescope lsp_definitions<CR>
+nnoremap <leader>li <cmd>Telescope lsp_implementations<CR>
 nnoremap <leader>ll <cmd>lua vim.lsp.buf.hover()<CR>
-nnoremap <leader>lr <cmd>lua vim.lsp.buf.references()<CR>
-nnoremap <leader>lt <cmd>lua vim.lsp.buf.type_definition()<CR>
+nnoremap <leader>lr <cmd>Telescope lsp_references<CR>
+nnoremap <leader>lt <cmd>Telescope lsp_type_definitions<CR>
 nnoremap <F2> <cmd>lua vim.lsp.buf.rename()<CR>
 
 " Debug
