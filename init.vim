@@ -409,10 +409,10 @@ cmp.setup({
     })
   })
 
-cmp.setup({
-  sources = {
-    { name = 'orgmode' }
-  }
+cmp.setup.filetype('org', {
+	sources = {
+		{ name = 'orgmode' }
+	}
 })
 
 
