@@ -540,6 +540,8 @@ local home = os.getenv('HOME')
 local db = require('dashboard')
 
 db.header_pad = 6
+db.hide_statusline = false 
+db.hide_tabline = false
 
 db.custom_center = {
       {icon = '  ',
