@@ -7,10 +7,13 @@ set smarttab
 set softtabstop=4
 set mouse=a
 set background=dark
+set cursorline
+set noshowmode
 
 call plug#begin()
 
-Plug 'https://github.com/vim-airline/vim-airline'
+" Plug 'https://github.com/vim-airline/vim-airline'
+Plug 'itchyny/lightline.vim'
 Plug 'kyazdani42/nvim-web-devicons' " for file icons
 
 " Autocomplete
@@ -79,6 +82,10 @@ Plug 'joshdick/onedark.vim'
 call plug#end()
 
 colorscheme onedark
+
+let g:lightline = {
+      \ 'colorscheme': 'one',
+      \ }
 
 let mapleader = " "
 
