@@ -16,8 +16,11 @@ call plug#begin()
 Plug 'itchyny/lightline.vim'
 Plug 'kyazdani42/nvim-web-devicons' " for file icons
 
-" Autocomplete
+" Lsp
 Plug 'https://github.com/neovim/nvim-lspconfig'
+Plug 'j-hui/fidget.nvim'
+
+" Autocomplete
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
@@ -45,7 +48,8 @@ Plug 'airblade/vim-gitgutter'
 Plug 'romgrk/barbar.nvim'
   
 " Comments
-Plug 'preservim/nerdcommenter'
+" Plug 'preservim/nerdcommenter'
+Plug 'numToStr/Comment.nvim'
 
 " Treesitter
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -287,6 +291,8 @@ require("indent_blankline").setup {
     -- show_current_context_start = true,
 }
 
+require('Comment').setup()
+
 -- Load custom tree-sitter grammar for org filetype
 require('orgmode').setup_ts_grammar()
 
@@ -438,6 +444,8 @@ require('lspconfig').omnisharp.setup {
 	capabilities = capabilities,
 	cmd = {"omnisharp"}
 }
+
+require"fidget".setup{}
 
 local dap = require('dap')
 dap.adapters.lldb = {
