@@ -9,16 +9,34 @@ set mouse=a
 set background=dark
 set cursorline
 set noshowmode
+set signcolumn=yes
+set laststatus=3
 
 call plug#begin()
 
 " Plug 'https://github.com/vim-airline/vim-airline'
-Plug 'itchyny/lightline.vim'
+Plug 'nvim-lualine/lualine.nvim'
+" Plug 'itchyny/lightline.vim'
 Plug 'kyazdani42/nvim-web-devicons' " for file icons
 
 " Lsp
 Plug 'https://github.com/neovim/nvim-lspconfig'
 Plug 'j-hui/fidget.nvim'
+Plug 'folke/trouble.nvim'
+Plug 'SmiteshP/nvim-navic'
+
+" Key display
+Plug 'folke/which-key.nvim'
+
+" notifications
+Plug 'rcarriga/nvim-notify'
+
+" window info
+Plug 'b0o/incline.nvim'
+
+" Rust
+Plug 'saecki/crates.nvim', { 'tag': 'v0.3.0' }
+Plug 'simrat39/rust-tools.nvim'
 
 " Autocomplete
 Plug 'hrsh7th/cmp-nvim-lsp'
@@ -34,12 +52,12 @@ Plug 'hrsh7th/vim-vsnip'
 
 " Debug
 Plug 'mfussenegger/nvim-dap'
+Plug 'rcarriga/nvim-dap-ui'
 
 " Autoclose
 Plug 'tmsvg/pear-tree'
 
 " Git
-" Plug 'tanvirtin/vgit.nvim'
 Plug 'TimUntersberger/neogit'
 Plug 'sindrets/diffview.nvim'
 Plug 'airblade/vim-gitgutter'
@@ -48,18 +66,20 @@ Plug 'airblade/vim-gitgutter'
 Plug 'romgrk/barbar.nvim'
   
 " Comments
-" Plug 'preservim/nerdcommenter'
 Plug 'numToStr/Comment.nvim'
+Plug 'folke/todo-comments.nvim'
 
 " Treesitter
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'RRethy/vim-illuminate'
 
 " Orgmode
 Plug 'nvim-orgmode/orgmode'
 Plug 'dhruvasagar/vim-table-mode'
 
 " Dashboard
-Plug 'glepnir/dashboard-nvim'
+" Plug 'glepnir/dashboard-nvim'
+Plug 'goolord/alpha-nvim'
 
 " Telescope
 Plug 'BurntSushi/ripgrep'
@@ -81,20 +101,19 @@ Plug 'lukas-reineke/indent-blankline.nvim'
 
 " Theme
 Plug 'joshdick/onedark.vim'
+Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
 " Plug 'lukas-reineke/onedark.nvim'
 
 call plug#end()
 
-colorscheme onedark
+colorscheme tokyonight-storm
 
-let g:lightline = {
-      \ 'colorscheme': 'one',
-      \ }
+let g:lightline = { 'colorscheme': 'tokyonight',
+	\ 'enable': {
+    \   'tabline': 0
+    \ }
+	\ }
 
-let mapleader = " "
-
-let g:airline_left_sep=''
-let g:airline_right_sep=''
 
 " Smart pairs are disabled by default:
 let g:pear_tree_smart_openers = 1
@@ -110,36 +129,35 @@ if exists("g:neovide")
 	"let g:neovide_scroll_animation_length = 2.0
 endif
 
-" Add spaces after comment delimiters by default
-let g:NERDSpaceDelims = 1
+" /////////////////// Keymap ///////////////////
+
+let mapleader = " "
 
 " Unbind space
 nnoremap <Space> <NOP>
 
-" Autoclose
-"inoremap " ""<left>
-"inoremap ' ''<left>
-"inoremap ( ()<left>
-"inoremap [ []<left>
-"inoremap { {}<left>
-"inoremap {<CR> {<CR>}<ESC>O
-"inoremap {;<CR> {<CR>};<ESC>O
+" Windowing
+nnoremap <leader>ws <cmd>split<cr>
+nnoremap <leader>wv <cmd>vsplit<cr>
 
-" Find files using Telescope command-line sugar.
+" Telescope
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope file_browser<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 nnoremap <leader>fo <cmd>Telescope oldfiles<cr>
-
-" Tab navigation
-"nnoremap <leader>tt <cmd>tabnew<cr>
-"nnoremap <leader>td <cmd>tabnext<cr>
-"nnoremap <leader>ta <cmd>tabprevious<cr>
-"nnoremap <leader>tc <cmd>tabclose<cr>
+nnoremap <leader>ft <cmd>TodoTelescope<cr>
 
 " Nvim Tree
 nnoremap <silent> <leader>tt <cmd>NvimTreeToggle<CR>
+
+" Trouble
+nnoremap <leader>xx <cmd>TroubleToggle<cr>
+nnoremap <leader>xw <cmd>TroubleToggle workspace_diagnostics<cr>
+nnoremap <leader>xd <cmd>TroubleToggle document_diagnostics<cr>
+nnoremap <leader>xq <cmd>TroubleToggle quickfix<cr>
+nnoremap <leader>xl <cmd>TroubleToggle loclist<cr>
+nnoremap gR <cmd>TroubleToggle lsp_references<cr>
 
 " Navigation
 tnoremap <A-h> <C-\><C-N><C-w>h
@@ -165,11 +183,6 @@ nnoremap <A-Down> <C-w>j
 nnoremap <A-Up> <C-w>k
 nnoremap <A-Right> <C-w>l
 
-" Terminal
-"nnoremap <F4> <cmd>bo sp<cr><cmd>terminal<cr><cmd>res 14<cr>
-"tnoremap <Esc> <C-\><C-n>
-"autocmd TermOpen * setlocal nonumber norelativenumber
-
 " Lsp
 nnoremap <leader>lx <cmd>lua vim.lsp.buf.declaration()<CR>
 nnoremap <leader>ld <cmd>Telescope lsp_definitions<CR>
@@ -189,6 +202,7 @@ nnoremap <silent> <Leader>db <Cmd>lua require'dap'.set_breakpoint(vim.fn.input('
 nnoremap <silent> <Leader>dp <Cmd>lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>
 nnoremap <silent> <Leader>dr <Cmd>lua require'dap'.repl.open()<CR>
 nnoremap <silent> <Leader>dl <Cmd>lua require'dap'.run_last()<CR>
+nnoremap <silent> <Leader>du <Cmd>lua require'dapui'.toggle()<CR>
 
 " Git
 nnoremap <silent> <leader>gg <Cmd>Neogit<CR>
@@ -219,24 +233,8 @@ nnoremap <silent>    <A-f> <Cmd>BufferPick<CR>
 
 set termguicolors " this variable must be enabled for colors to be applied properly
 
+" /////////////////// Completion highlighting ///////////////////
 
-""highlight! CmpItemAbbrDeprecated guibg=NONE gui=strikethrough guifg=#808080
-" blue
-""highlight! CmpItemAbbrMatch guibg=NONE guifg=#569CD6
-""highlight! CmpItemAbbrMatchFuzzy guibg=NONE guifg=#569CD6
-" light blue
-""highlight! CmpItemKindVariable guibg=NONE guifg=#9CDCFE cterm=italic
-""highlight! CmpItemKindInterface guibg=NONE guifg=#9CDCFE
-""highlight! CmpItemKindText guibg=NONE guifg=#9CDCFE
-" pink
-""highlight! CmpItemKindFunction guibg=NONE guifg=#C586C0
-""highlight! CmpItemKindMethod guibg=NONE guifg=#C586C0
-" front
-""highlight! CmpItemKindKeyword guibg=NONE guifg=#D4D4D4
-""highlight! CmpItemKindProperty guibg=NONE guifg=#D4D4D4
-""highlight! CmpItemKindUnit guibg=NONE guifg=#D4D4D4
-
-"New
 highlight! PmenuSel guibg=#282C34 guifg=NONE
 highlight! Pmenu guifg=#C5CDD9 guibg=#22252A
 
@@ -281,6 +279,35 @@ highlight! CmpItemKindTypeParameter guifg=#D8EEEB guibg=#58B5A8
 " a list of groups can be found at `:help nvim_tree_highlight`
 lua << EOF
 
+-- /////////////////// Misc ///////////////////
+
+vim.notify = require("notify")
+
+require('incline').setup{
+	window = {
+		margin = {
+			horizontal = 0,
+			vertical = 0,
+		}
+	}
+}
+
+local navic = require("nvim-navic")
+
+navic.setup{
+	separator = "  "
+}
+
+require('lualine').setup({
+	sections = {
+		lualine_c = {
+			{ navic.get_location, cond = navic.is_available },
+		}
+	}
+})
+
+require('crates').setup()
+
 require("toggleterm").setup{
 	open_mapping = [[<F4>]],
 }
@@ -291,10 +318,50 @@ require("indent_blankline").setup {
     -- show_current_context_start = true,
 }
 
-require('Comment').setup()
+require("which-key").setup {
+	-- your configuration comes here
+	-- or leave it empty to use the default settings
+	-- refer to the configuration section below
+}
+
+require('Comment').setup({
+ignore = '^$',
+toggler = {
+	line = '<leader>cc',
+	block = '<leader>cb',
+},
+})
+
+require("todo-comments").setup {
+    -- your configuration comes here
+    -- or leave it empty to use the default settings
+    -- refer to the configuration section below
+  }
 
 -- Load custom tree-sitter grammar for org filetype
 require('orgmode').setup_ts_grammar()
+
+require("trouble").setup {
+    -- your configuration comes here
+    -- or leave it empty to use the default settings
+    -- refer to the configuration section below
+}
+
+require"fidget".setup{}
+
+require('leap').add_default_mappings()
+
+require'bufferline'.setup {
+	diagnostics = {
+		-- you can use a list
+		{enabled = true, icon = ''}, -- ERROR
+		{enabled = true, icon = ''}, -- WARN
+		{enabled = false}, -- INFO
+		{enabled = true, icon = ''},  -- HINT
+	},
+}
+
+-- /////////////////// Treesitter ///////////////////
 
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all"
@@ -330,6 +397,8 @@ require'nvim-treesitter.configs'.setup {
   },
 }
 
+-- /////////////////// Orgmode ///////////////////
+
 require('orgmode').setup({
   org_agenda_files = {'~/Dropbox/org/*', '~/my-orgs/**/*'},
   org_default_notes_file = '~/Dropbox/org/refile.org',
@@ -343,7 +412,8 @@ vim.api.nvim_set_keymap('n', '<C-k>', '<cmd>lua vim.diagnostic.goto_prev()<CR>',
 vim.api.nvim_set_keymap('n', '<C-j>', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
 vim.api.nvim_set_keymap('n', '<space>eq', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
 
--- Set up nvim-cmp.
+-- /////////////////// Nvim-cmp ///////////////////
+
 local cmp = require'cmp'
 local lspkind = require('lspkind')
 
@@ -379,6 +449,7 @@ cmp.setup({
       -- { name = 'luasnip' }, -- For luasnip users.
       -- { name = 'ultisnips' }, -- For ultisnips users.
       -- { name = 'snippy' }, -- For snippy users.
+	  { name = "crates" },
     }, {
       { name = 'buffer' },
     }),
@@ -428,57 +499,89 @@ cmp.setup.filetype('org', {
 	}
 })
 
+local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+for type, icon in pairs(signs) do
+  local hl = "DiagnosticSign" .. type
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+end
+
+local on_attach = function(client, bufnr)
+    if client.server_capabilities.documentSymbolProvider then
+        navic.attach(client, bufnr)
+    end
+end
 
   -- Set up lspconfig.
 local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
   -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
-local servers = { 'rust_analyzer', 'ccls', 'metals', 'bashls' }
+local servers = {'ccls', 'metals', 'bashls' }
 for _, lsp in pairs(servers) do
   require('lspconfig')[lsp].setup { 
-		capabilities = capabilities
+		capabilities = capabilities,
+		on_attach = on_attach
 	}
 end
 
-
 require('lspconfig').omnisharp.setup { 
 	capabilities = capabilities,
-	cmd = {"omnisharp"}
+	cmd = {"omnisharp"},
+	on_attach = on_attach
 }
 
-require"fidget".setup{}
+-- /////////////////// Rust ///////////////////
+
+local rt = require("rust-tools")
+
+rt.setup({
+	on_initialized = function(health)
+		vim.notify("Started rust-analyzer with status: " .. health)
+	end,
+	server = {
+		on_attach = function(client, bufnr)
+			-- Hover actions
+			vim.keymap.set("n", "<leader>ll", rt.hover_actions.hover_actions, { buffer = bufnr })
+			-- Code action groups
+			vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+			navic.attach(client, bufnr)
+		end,
+	capabilities = capabilities,
+	},
+})
+
+-- /////////////////// Debug ///////////////////
 
 local dap = require('dap')
 dap.adapters.lldb = {
-  type = 'executable',
-  command = '/usr/bin/lldb-vscode', -- adjust as needed, must be absolute path
-  name = 'lldb'
+	type = 'executable',
+	command = '/usr/bin/lldb-vscode', -- adjust as needed, must be absolute path
+	name = 'lldb'
 }
 
 dap.configurations.cpp = {
-  {
-    name = 'Launch',
-    type = 'lldb',
-    request = 'launch',
-    program = function()
-      return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-    end,
-    cwd = '${workspaceFolder}',
-    stopOnEntry = false,
-    args = {},
+	{
+			name = 'Launch',
+			type = 'lldb',
+			request = 'launch',
+			program = function()
+			return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+			end,
+			cwd = '${workspaceFolder}',
+			stopOnEntry = false,
+			args = {},
 
-    -- 💀
-    -- if you change `runInTerminal` to true, you might need to change the yama/ptrace_scope setting:
-    --
-    --    echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
-    --
-    -- Otherwise you might get the following error:
-    --
-    --    Error on launch: Failed to attach to the target process
-    --
-    -- But you should be aware of the implications:
-    -- https://www.kernel.org/doc/html/latest/admin-guide/LSM/Yama.html
-    -- runInTerminal = false,
-  },
+			-- 💀
+			-- if you change `runInTerminal` to true, you might need to change the yama/ptrace_scope setting:
+			--
+			--    echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
+			--
+			-- Otherwise you might get the following error:
+			--
+			--    Error on launch: Failed to attach to the target process
+			--
+			-- But you should be aware of the implications:
+			-- https://www.kernel.org/doc/html/latest/admin-guide/LSM/Yama.html
+			-- runInTerminal = false,
+	},
 }
 
 -- If you want to use this for Rust and C, add something like this:
@@ -486,24 +589,39 @@ dap.configurations.cpp = {
 dap.configurations.c = dap.configurations.cpp
 dap.configurations.rust = dap.configurations.cpp
 
+local dapui = require("dapui")
+dapui.setup()
+
+dap.listeners.after.event_initialized["dapui_config"] = function()
+  dapui.open()
+end
+dap.listeners.before.event_terminated["dapui_config"] = function()
+  dapui.close()
+end
+dap.listeners.before.event_exited["dapui_config"] = function()
+  dapui.close()
+end
+
+-- /////////////////// Neogit ///////////////////
+
 local neogit = require('neogit')
 
 neogit.setup {
 	integrations = {
-    -- Neogit only provides inline diffs. If you want a more traditional way to look at diffs, you can use `sindrets/diffview.nvim`.
-    -- The diffview integration enables the diff popup, which is a wrapper around `sindrets/diffview.nvim`.
-    --
-    -- Requires you to have `sindrets/diffview.nvim` installed.
-    -- use { 
-    --   'TimUntersberger/neogit', 
-    --   requires = { 
-    --     'nvim-lua/plenary.nvim',
-    --     'sindrets/diffview.nvim' 
-    --   }
-    -- }
-    --
-    diffview = true
-  },
+		-- Neogit only provides inline diffs. If you want a more traditional way to look at diffs, you can use `sindrets/diffview.nvim`.
+		-- The diffview integration enables the diff popup, which is a wrapper around `sindrets/diffview.nvim`.
+		--
+		-- Requires you to have `sindrets/diffview.nvim` installed.
+		-- use { 
+			--   'TimUntersberger/neogit', 
+			--   requires = { 
+				--     'nvim-lua/plenary.nvim',
+				--     'sindrets/diffview.nvim' 
+				--   }
+				-- }
+				--
+				diffview = true
+	},
 }
 
 vim.o.updatetime = 300
@@ -529,7 +647,11 @@ vim.wo.signcolumn = 'yes'
 --        "},
 --"})
 
+-- /////////////////// Telescope ///////////////////
+
 require("telescope").load_extension "file_browser"
+
+-- /////////////////// Nvim-tree ///////////////////
 
 require("nvim-tree").setup({
   sort_by = "case_sensitive",
@@ -549,8 +671,11 @@ require("nvim-tree").setup({
   },
 })
 
-require('leap').add_default_mappings()
+-- /////////////////// Startup ///////////////////
 
+require'alpha'.setup(require'alpha.themes.startify'.config)
+
+--[[
 local home = os.getenv('HOME')
 local db = require('dashboard')
 
@@ -593,6 +718,6 @@ db.custom_header = {
 \ ' ██║ ╚████║ ███████╗╚██████╔╝  ╚████╔╝  ██║ ██║ ╚═╝ ██║',
 \ ' ╚═╝  ╚═══╝ ╚══════╝ ╚═════╝    ╚═══╝   ╚═╝ ╚═╝     ╚═╝',
 \}
-
+]]--
 EOF
 
