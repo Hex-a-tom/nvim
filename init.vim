@@ -18,6 +18,9 @@ call plug#begin()
 Plug 'nvim-lua/plenary.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
 
+" Icons
+Plug 'ziontee113/icon-picker.nvim'
+
 " Statusline
 Plug 'nvim-lualine/lualine.nvim'
 
@@ -35,6 +38,7 @@ Plug 'rcarriga/nvim-notify'
 
 " window info
 Plug 'b0o/incline.nvim'
+Plug 'sunjon/shade.nvim'
 
 " Rust
 Plug 'saecki/crates.nvim', { 'tag': 'v0.3.0' }
@@ -49,8 +53,13 @@ Plug 'hrsh7th/nvim-cmp'
 Plug 'onsails/lspkind.nvim'
 
 " For vsnip users.
-Plug 'hrsh7th/cmp-vsnip'
-Plug 'hrsh7th/vim-vsnip'
+" Plug 'hrsh7th/cmp-vsnip'
+" Plug 'hrsh7th/vim-vsnip'
+
+" Snippets
+Plug 'rafamadriz/friendly-snippets'
+Plug 'L3MON4D3/LuaSnip', {'tag': 'v1.*', 'do': 'make install_jsregexp'}
+Plug 'saadparwaiz1/cmp_luasnip'
 
 " Debug
 Plug 'mfussenegger/nvim-dap'
@@ -76,8 +85,8 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'RRethy/vim-illuminate'
 
 " Sessions
-Plug 'Shatur/neovim-session-manager'
-
+" Plug 'Shatur/neovim-session-manager'
+Plug 'ahmedkhalf/project.nvim'
 
 " Orgmode
 Plug 'nvim-orgmode/orgmode'
@@ -93,6 +102,9 @@ Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
 Plug 'nvim-telescope/telescope-file-browser.nvim'
 Plug 'nvim-telescope/telescope-ui-select.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+
+" Clipboard
+Plug 'AckslD/nvim-neoclip.lua'
 
 " File Tree
 Plug 'nvim-tree/nvim-tree.lua'
@@ -143,9 +155,13 @@ let mapleader = " "
 " Unbind space
 nnoremap <Space> <NOP>
 
+" Icon picker
+nnoremap <Space>i <cmd>IconPickerNormal<cr>
+
 " Windowing
 nnoremap <leader>ws <cmd>split<cr>
 nnoremap <leader>wv <cmd>vsplit<cr>
+nnoremap <leader>wc <cmd>close<cr>
 
 " Telescope
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
@@ -154,6 +170,8 @@ nnoremap <leader>fb <cmd>Telescope file_browser<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 nnoremap <leader>fo <cmd>Telescope oldfiles<cr>
 nnoremap <leader>ft <cmd>TodoTelescope<cr>
+nnoremap <leader>p <cmd>Telescope neoclip<cr>
+nnoremap <leader>fp <cmd> Telescope projects<cr>
 
 " Nvim Tree
 nnoremap <silent> <leader>tt <cmd>NvimTreeToggle<CR>
@@ -214,7 +232,7 @@ nnoremap <silent> <Leader>du <Cmd>lua require'dapui'.toggle()<CR>
 " Git
 nnoremap <silent> <leader>gg <Cmd>Neogit<CR>
 
-" Move to previous/next
+" Barbar
 nnoremap <silent>    <A-,> <Cmd>BufferPrevious<CR>
 nnoremap <silent>    <A-.> <Cmd>BufferNext<CR>
 " Re-order to previous/next
@@ -290,6 +308,10 @@ lua << EOF
 
 vim.notify = require("notify")
 
+require("icon-picker").setup({ disable_legacy_commands = true })
+
+require('neoclip').setup()
+
 require('incline').setup{
 	window = {
 		margin = {
@@ -325,11 +347,17 @@ require("indent_blankline").setup {
     -- show_current_context_start = true,
 }
 
-require("which-key").setup {
-	-- your configuration comes here
-	-- or leave it empty to use the default settings
-	-- refer to the configuration section below
-}
+require("which-key").setup {}
+
+require'shade'.setup({
+  overlay_opacity = 50,
+  opacity_step = 1,
+  keys = {
+    brightness_up    = '<C-Up>',
+    brightness_down  = '<C-Down>',
+    toggle           = '<Leader>s',
+  }
+})
 
 require('Comment').setup({
 ignore = '^$',
@@ -340,18 +368,11 @@ toggler = {
 })
 
 
-require("todo-comments").setup {
-    -- your configuration comes here
-    -- or leave it empty to use the default settings
-    -- refer to the configuration section below
-  }
+require("todo-comments").setup {}
 
-require('session_manager').setup({
-	autoload_mode = require('session_manager.config').AutoloadMode.Disabled,
-	autosave_ignore_dirs = {
-		vim.fn.expand('$HOME')
-	},
-})
+require("project_nvim").setup {
+	silent_chdir = false,
+}
 
 -- Load custom tree-sitter grammar for org filetype
 require('orgmode').setup_ts_grammar()
@@ -432,12 +453,14 @@ vim.api.nvim_set_keymap('n', '<space>eq', '<cmd>lua vim.diagnostic.setloclist()<
 local cmp = require'cmp'
 local lspkind = require('lspkind')
 
+require("luasnip.loaders.from_vscode").lazy_load()
+
 cmp.setup({
     snippet = {
       -- REQUIRED - you must specify a snippet engine
       expand = function(args)
-        vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-        -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+        -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+        require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
         -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
         -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
       end,
@@ -460,8 +483,8 @@ cmp.setup({
     }),
     sources = cmp.config.sources({
       { name = 'nvim_lsp' },
-      { name = 'vsnip' }, -- For vsnip users.
-      -- { name = 'luasnip' }, -- For luasnip users.
+      -- { name = 'vsnip' }, -- For vsnip users.
+      { name = 'luasnip' }, -- For luasnip users.
       -- { name = 'ultisnips' }, -- For ultisnips users.
       -- { name = 'snippy' }, -- For snippy users.
 	  { name = "crates" },
@@ -683,6 +706,8 @@ telescope.setup {
 	}
 }
 
+telescope.load_extension('projects')
+telescope.load_extension('neoclip')
 telescope.load_extension "file_browser"
 telescope.load_extension("ui-select")
 telescope.load_extension('fzf')
@@ -713,7 +738,7 @@ local startify = require'alpha.themes.startify'
 
 startify.section.top_buttons.val = {
 	startify.button( "e", "New file" , ":ene <BAR> startinsert <CR>"),
-	startify.button( "s", "Load session", ":SessionManager load_session<CR>")
+	startify.button( "p", "Load project", ":Telescope projects<CR>")
 }
 
 startify.mru_opts.autocd = true
