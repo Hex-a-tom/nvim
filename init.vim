@@ -18,6 +18,9 @@ call plug#begin()
 Plug 'nvim-lua/plenary.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
 
+" Custom (chess)
+" Plug '~/Repos/lua/chess-nvim'
+
 " Icons
 Plug 'ziontee113/icon-picker.nvim'
 
@@ -89,7 +92,8 @@ Plug 'RRethy/vim-illuminate'
 Plug 'ahmedkhalf/project.nvim'
 
 " Orgmode
-Plug 'nvim-orgmode/orgmode'
+" Plug 'nvim-orgmode/orgmode'
+Plug 'nvim-neorg/neorg'
 Plug 'dhruvasagar/vim-table-mode'
 
 " Dashboard
@@ -375,7 +379,7 @@ require("project_nvim").setup {
 }
 
 -- Load custom tree-sitter grammar for org filetype
-require('orgmode').setup_ts_grammar()
+-- require('orgmode').setup_ts_grammar()
 
 require("trouble").setup {
     -- your configuration comes here
@@ -435,10 +439,39 @@ require'nvim-treesitter.configs'.setup {
 
 -- /////////////////// Orgmode ///////////////////
 
-require('orgmode').setup({
-  org_agenda_files = {'~/Dropbox/org/*', '~/my-orgs/**/*'},
-  org_default_notes_file = '~/Dropbox/org/refile.org',
-})
+-- require('orgmode').setup({
+  -- org_agenda_files = {'~/Dropbox/org/*', '~/my-orgs/**/*'},
+  -- org_default_notes_file = '~/Dropbox/org/refile.org',
+-- })
+
+require('neorg').setup {
+    load = {
+        ["core.defaults"] = {}, -- Loads default behaviour
+        ["core.norg.concealer"] = {}, -- Adds pretty icons to your documents
+        ["core.norg.dirman"] = { -- Manages Neorg workspaces
+            config = {
+                workspaces = {
+                    notes = "~/Documents/notes",
+                },
+            },
+        },
+		["core.autocommands"] = {},
+		["core.mode"] = {},
+		["core.neorgcmd"] = {},
+		["core.highlights"] = {},
+		["core.integrations.treesitter"] = {
+			config = {
+				configure_parsers = true,
+				install_parsers = true,
+			}
+		},
+		["core.norg.completion"] = {
+			config = {
+				engine = "nvim-cmp",
+			},
+		},
+    },
+}
 
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
@@ -488,6 +521,7 @@ cmp.setup({
       -- { name = 'ultisnips' }, -- For ultisnips users.
       -- { name = 'snippy' }, -- For snippy users.
 	  { name = "crates" },
+	  { name = "neorg" },
     }, {
       { name = 'buffer' },
     }),
@@ -531,11 +565,11 @@ cmp.setup({
     })
   })
 
-cmp.setup.filetype('org', {
-	sources = {
-		{ name = 'orgmode' }
-	}
-})
+-- cmp.setup.filetype('org', {
+	-- sources = {
+		-- { name = 'orgmode' }
+	-- }
+-- })
 
 local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
 for type, icon in pairs(signs) do
@@ -552,13 +586,36 @@ end
   -- Set up lspconfig.
 local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
   -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
-local servers = {'ccls', 'metals', 'bashls' }
+local servers = {'ccls', 'metals', 'bashls'}
 for _, lsp in pairs(servers) do
   require('lspconfig')[lsp].setup { 
 		capabilities = capabilities,
 		on_attach = on_attach
 	}
 end
+
+require('lspconfig').lua_ls.setup {
+	settings = {
+		Lua = {
+			runtime = {
+				-- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+				version = 'LuaJIT',
+			},
+			diagnostics = {
+				-- Get the language server to recognize the `vim` global
+				globals = {'vim'},
+			},
+			workspace = {
+				-- Make the server aware of Neovim runtime files
+				library = vim.api.nvim_get_runtime_file("", true),
+			},
+			-- Do not send telemetry data containing a randomized but unique identifier
+			telemetry = {
+				enable = false,
+			},
+		},
+	},
+}
 
 require('lspconfig').omnisharp.setup { 
 	capabilities = capabilities,
