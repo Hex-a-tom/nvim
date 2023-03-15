@@ -14,10 +14,12 @@ set laststatus=3
 
 call plug#begin()
 
-" Plug 'https://github.com/vim-airline/vim-airline'
+" Dependencies
+Plug 'nvim-lua/plenary.nvim'
+Plug 'kyazdani42/nvim-web-devicons'
+
+" Statusline
 Plug 'nvim-lualine/lualine.nvim'
-" Plug 'itchyny/lightline.vim'
-Plug 'kyazdani42/nvim-web-devicons' " for file icons
 
 " Lsp
 Plug 'https://github.com/neovim/nvim-lspconfig'
@@ -73,6 +75,10 @@ Plug 'folke/todo-comments.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'RRethy/vim-illuminate'
 
+" Sessions
+Plug 'Shatur/neovim-session-manager'
+
+
 " Orgmode
 Plug 'nvim-orgmode/orgmode'
 Plug 'dhruvasagar/vim-table-mode'
@@ -83,9 +89,10 @@ Plug 'goolord/alpha-nvim'
 
 " Telescope
 Plug 'BurntSushi/ripgrep'
-Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
 Plug 'nvim-telescope/telescope-file-browser.nvim'
+Plug 'nvim-telescope/telescope-ui-select.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
 " File Tree
 Plug 'nvim-tree/nvim-tree.lua'
@@ -332,11 +339,19 @@ toggler = {
 },
 })
 
+
 require("todo-comments").setup {
     -- your configuration comes here
     -- or leave it empty to use the default settings
     -- refer to the configuration section below
   }
+
+require('session_manager').setup({
+	autoload_mode = require('session_manager.config').AutoloadMode.Disabled,
+	autosave_ignore_dirs = {
+		vim.fn.expand('$HOME')
+	},
+})
 
 -- Load custom tree-sitter grammar for org filetype
 require('orgmode').setup_ts_grammar()
@@ -649,7 +664,28 @@ vim.wo.signcolumn = 'yes'
 
 -- /////////////////// Telescope ///////////////////
 
-require("telescope").load_extension "file_browser"
+local telescope = require("telescope")
+
+telescope.setup {
+	extensions = {
+		["ui-select"] = {
+			require("telescope.themes").get_dropdown {
+
+			}
+		},
+		["fzf"] = {
+			fuzzy = true,                    -- false will only do exact matching
+			override_generic_sorter = true,  -- override the generic sorter
+			override_file_sorter = true,     -- override the file sorter
+			case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+											 -- the default case_mode is "smart_case"
+		}
+	}
+}
+
+telescope.load_extension "file_browser"
+telescope.load_extension("ui-select")
+telescope.load_extension('fzf')
 
 -- /////////////////// Nvim-tree ///////////////////
 
@@ -673,51 +709,15 @@ require("nvim-tree").setup({
 
 -- /////////////////// Startup ///////////////////
 
-require'alpha'.setup(require'alpha.themes.startify'.config)
+local startify = require'alpha.themes.startify'
 
---[[
-local home = os.getenv('HOME')
-local db = require('dashboard')
-
-db.header_pad = 6
-db.hide_statusline = false 
-db.hide_tabline = false
-
-db.custom_center = {
-      {icon = '  ',
-      desc = 'Open latest session                     ',
-      shortcut = 'SPC s l',
-      action ='SessionLoad'},
-      {icon = '  ',
-      desc = 'Recently opened files                   ',
-      action =  'Telescope oldfiles',
-      shortcut = 'SPC f o'},
-      {icon = '  ',
-      desc = 'Find File                               ',
-      action = 'Telescope find_files find_command=rg,--hidden,--files',
-      shortcut = 'SPC f f'},
-      {icon = '  ',
-      desc ='File Browser                            ',
-      action =  'Telescope file_browser',
-      shortcut = 'SPC f b'},
-      {icon = '  ',
-      desc = 'Find word                               ',
-      action = 'Telescope live_grep',
-      shortcut = 'SPC f g'},
-      {icon = '  ',
-      desc = 'Open Neovim Config                      ',
-      action = 'e ' .. home .. '/.config/nvim/init.vim',
-      shortcut = 'SPC f d'},
+startify.section.top_buttons.val = {
+	startify.button( "e", "New file" , ":ene <BAR> startinsert <CR>"),
+	startify.button( "s", "Load session", ":SessionManager load_session<CR>")
 }
 
-db.custom_header = {
-\ ' ███╗   ██╗ ███████╗ ██████╗  ██╗   ██╗ ██╗ ███╗   ███╗',
-\ ' ████╗  ██║ ██╔════╝██╔═══██╗ ██║   ██║ ██║ ████╗ ████║',
-\ ' ██╔██╗ ██║ █████╗  ██║   ██║ ██║   ██║ ██║ ██╔████╔██║',
-\ ' ██║╚██╗██║ ██╔══╝  ██║   ██║ ╚██╗ ██╔╝ ██║ ██║╚██╔╝██║',
-\ ' ██║ ╚████║ ███████╗╚██████╔╝  ╚████╔╝  ██║ ██║ ╚═╝ ██║',
-\ ' ╚═╝  ╚═══╝ ╚══════╝ ╚═════╝    ╚═══╝   ╚═╝ ╚═╝     ╚═╝',
-\}
-]]--
-EOF
+startify.mru_opts.autocd = true
 
+require'alpha'.setup(startify.config)
+
+EOF
