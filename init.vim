@@ -159,6 +159,14 @@ let mapleader = " "
 " Unbind space
 nnoremap <Space> <NOP>
 
+" Not the right way to use vim, but who cares, right?
+nnoremap <C-q> <cmd>q<cr>
+nnoremap <C-s> <cmd>w<cr>
+nnoremap <C-v> "+p
+vnoremap <C-c> "+y 
+vnoremap <C-x> "+c 
+vnoremap <C-v> c<ESC>"+p 
+
 " Icon picker
 nnoremap <Space>i <cmd>IconPickerNormal<cr>
 
