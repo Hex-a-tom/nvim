@@ -173,6 +173,7 @@ return {
 		"j-hui/fidget.nvim",
 		config = true,
 		event = "InsertEnter",
+		enabled = false,
 	},
 	{
 		"L3MON4D3/LuaSnip",

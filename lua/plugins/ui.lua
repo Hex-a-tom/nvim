@@ -42,6 +42,21 @@ return {
 		}
 	},
 	{
+		"norcalli/nvim-colorizer.lua",
+		opts = {
+			'css';
+			'javascript';
+			html = {
+				mode = 'foreground';
+			}
+		},
+		ft = {
+			"css",
+			"javascript",
+			"html",
+		}
+	},
+	{
 		"b0o/incline.nvim",
 		opts = {
 			window = {
