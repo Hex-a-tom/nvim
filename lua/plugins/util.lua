@@ -1,6 +1,10 @@
 return {
 	"RRethy/vim-illuminate",
 	{
+		"christoomey/vim-tmux-navigator",
+		lazy = false,
+	},
+	{
 		"ggandor/leap.nvim",
 		config = function ()
 			require('leap').add_default_mappings()
