@@ -243,13 +243,13 @@ return {
 				sources = cmp.config.sources({
 					{ name = 'nvim_lsp' },
 					-- { name = 'vsnip' }, -- For vsnip users.
-					{ name = 'luasnip' }, -- For luasnip users.
+					{ name = 'luasnip', priority = 5 }, -- For luasnip users.
 					-- { name = 'ultisnips' }, -- For ultisnips users.
 					-- { name = 'snippy' }, -- For snippy users.
 					{ name = "crates" },
 					{ name = "neorg" },
 				}, {
-					{ name = 'buffer' },
+					{ name = 'buffer', priority = 0.5 },
 				}),
 				formatting = {
 					fields = { "kind", "abbr", "menu" },
