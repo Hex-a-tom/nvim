@@ -1,9 +1,11 @@
 return {
 	{
+		-- TODO: Stop from openeing when no executable is selected
 		"rcarriga/nvim-dap-ui",
 		lazy = true,
 	},
 	{
+		-- TODO: Make breakpoint look better
 		"mfussenegger/nvim-dap",
 		keys = {
 			{"<F5>", "<cmd>lua require'dap'.continue()<CR>", desc = "Continue"},
@@ -33,6 +35,7 @@ return {
 					name = 'Launch',
 					type = 'lldb',
 					request = 'launch',
+					-- TODO: fix program selection function
 					program = function()
 						return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
 					end,

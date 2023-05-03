@@ -12,7 +12,8 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 vim.g.mapleader = " "
-vim.keymap.set('n', '<Space>', '<NOP>', {silent = true})
+vim.keymap.set('n', '<Space>', '<NOP>', {silent = true, noremap = false})
+vim.cmd("noremap <Space> <NOP>")
 
 vim.api.nvim_set_option('number', true)
 vim.api.nvim_set_option('relativenumber', true)

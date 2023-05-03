@@ -9,6 +9,7 @@ return {
 		end
 	},
 	{
+		-- TODO: Fix confirmation dialog
 		"TimUntersberger/neogit",
 		opts = {
 			integrations = {

@@ -77,6 +77,7 @@ return {
 		version = "0.3.0",
 		config = function ()
 			local crates = require('crates')
+			crates.setup()
 			local opts = { noremap = true, silent = true }
 
 			vim.keymap.set('n', '<leader>ct', crates.toggle, opts)

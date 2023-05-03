@@ -69,6 +69,7 @@ return {
 		event = "VeryLazy",
 	},
 	{
+		-- TODO: Fix error when exit last non terminal window
 		"akinsho/toggleterm.nvim",
 		version = "*",
 		opts = {
