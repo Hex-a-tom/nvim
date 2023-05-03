@@ -16,7 +16,21 @@ return {
 						end
 					},
 				},
-				lualine_y = { 'location' },
+				lualine_y = {
+					{
+						function() return require("noice").api.status.command.get() end,
+						cond = function() return package.loaded["noice"] and require("noice").api.status.command.has() end,
+					},
+					{
+						function() return require("noice").api.status.mode.get() end,
+						cond = function() return package.loaded["noice"] and require("noice").api.status.mode.has() end,
+					},
+					{
+							function() return " " .. require("dap").status() end,
+							cond = function () return package.loaded["dap"] and require("dap").status() ~= "" end,
+					},
+					'location',
+				},
 				lualine_z = {
 					{
 						'datetime',
@@ -25,7 +39,7 @@ return {
 					{
 						require("lazy.status").updates,
 						cond = require("lazy.status").has_updates,
-						color = { fg = "#ff9e64" },
+						color = { fg = "#ff9e64", bg = "#1e2030" },
 					},
 				},
 			},
@@ -50,6 +64,7 @@ return {
 				mode = 'foreground';
 			}
 		},
+		cmd = "ColorizerToggle",
 		ft = {
 			"css",
 			"javascript",
@@ -132,6 +147,11 @@ return {
 			options = {
 				separator_style = "slant",
 				diagnostics = "nvim_lsp",
+				diagnostics_indicator = function(_, _, diag)
+						local ret = (diag.error and " " .. diag.error .. " " or "")
+						.. (diag.warning and " " .. diag.warning or "")
+						return vim.trim(ret)
+				end,
 			},
 		},
 	},
@@ -145,7 +165,21 @@ return {
 		version = "0.1.*",
 		cmd = "Telescope",
 		keys = {
-			{"<leader>f", desc = "Find (Telescope)"}
+			{"<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find Files"},
+			{"<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Live Grep"},
+			{"<leader>fb", "<cmd>Telescope file_browser<cr>", desc = "File Browser"},
+			{"<leader>fh", "<cmd>Telescope help_tags<cr>", desc = "Helpfiles"},
+			{"<leader>fo", "<cmd>Telescope oldfiles<cr>", desc = "Oldfiles"},
+			{"<leader>ft", "<cmd>TodoTelescope<cr>", desc = "Todo"},
+			{"<leader>p", "<cmd>Telescope neoclip<cr>", desc = "Neoclip"},
+			{"<leader>fp", "<cmd>Telescope projects<cr>", desc = "Projects"},
+			{"<leader>:", "<cmd>Telescope command_history<cr>", desc = "Command History" },
+			{"<leader>fB", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
+			{"<leader>fa", "<cmd>Telescope autocommands<cr>", desc = "Auto Commands" },
+			{"<leader>xD", "<cmd>Telescope diagnostics bufnr=0<cr>", desc = "Document diagnostics" },
+			{"<leader>xW", "<cmd>Telescope diagnostics<cr>", desc = "Workspace diagnostics" },
+			{"<leader>fm", "<cmd>Telescope marks<cr>", desc = "Jump to Mark" },
+			{"<leader>fr", "<cmd>Telescope resume<cr>", desc = "Resume" },
 		},
 		dependencies = {
 			"BurntSushi/ripgrep",
@@ -156,17 +190,6 @@ return {
 			"project.nvim",
 			"nvim-neoclip.lua",
 		},
-		init = function ()
-			local opts = {silent = true, noremap = true}
-			vim.keymap.set('n', '<leader>ff', '<cmd>Telescope find_files<cr>', opts)
-			vim.keymap.set('n', '<leader>fg', '<cmd>Telescope live_grep<cr>', opts)
-			vim.keymap.set('n', '<leader>fb', '<cmd>Telescope file_browser<cr>', opts)
-			vim.keymap.set('n', '<leader>fh', '<cmd>Telescope help_tags<cr>', opts)
-			vim.keymap.set('n', '<leader>fo', '<cmd>Telescope oldfiles<cr>', opts)
-			vim.keymap.set('n', '<leader>ft', '<cmd>TodoTelescope<cr>', opts)
-			vim.keymap.set('n', '<leader>p', '<cmd>Telescope neoclip<cr>', opts)
-			vim.keymap.set('n', '<leader>fp', '<cmd> Telescope projects<cr>', opts)
-		end,
 		config = function ()
 			local telescope = require("telescope")
 

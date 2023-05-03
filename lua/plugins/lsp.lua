@@ -105,7 +105,7 @@ return {
 	},
 	{
 		"https://github.com/neovim/nvim-lspconfig",
-		lazy = true,
+		event = "VeryLazy",
 		dependencies = {
 			"neodev.nvim"
 		},
@@ -115,19 +115,15 @@ return {
 				local hl = "DiagnosticSign" .. type
 				vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 			end
-
-			local opts = {silent = true, noremap = true}
-
-			vim.keymap.set('n', '<leader>lx', vim.lsp.buf.declaration, opts)
-			vim.keymap.set('n', '<leader>ld', '<cmd>Telescope lsp_definitions<CR>', opts)
-			vim.keymap.set('n', '<leader>li', '<cmd>Telescope lsp_implementations<CR>', opts)
-			vim.keymap.set('n', '<leader>ll', vim.lsp.buf.hover, opts)
-			vim.keymap.set('n', '<leader>lr', '<cmd>Telescope lsp_references<CR>', opts)
-			vim.keymap.set('n', '<leader>lt', '<cmd>Telescope lsp_type_definitions<CR>', opts)
-			vim.keymap.set('n', '<F2>', vim.lsp.buf.rename, opts)
 		end,
 		keys = {
-			{"<leader>l", desc = "Lsp"}
+			{"<leader>lx", vim.lsp.buf.declaration, desc = "Declaration"},
+			{"<leader>ld", "<cmd>Telescope lsp_definitions<CR>", desc = "Definition"},
+			{"<leader>li", "<cmd>Telescope lsp_implementations<CR>", desc = "Implementations"},
+			{"<leader>ll", vim.lsp.buf.hover, desc = "Hover"},
+			{"<leader>lr", "<cmd>Telescope lsp_references<cr>", desc = "References"},
+			{"<leader>lt", "<cmd>Telescope lsp_type_definitions<cr>", desc = "Type Definitions"},
+			{"<F2>", vim.lsp.buf.rename, desc = "Rename"},
 		},
 	},
 	{
@@ -168,7 +164,7 @@ return {
 					additional_vim_regex_highlighting = {'org'},
 				},
 			}
-		end
+		end,
 	},
 	{
 		"j-hui/fidget.nvim",
@@ -379,16 +375,15 @@ return {
 	},
 	{
 		"folke/trouble.nvim",
-		config = function ()
-			local opts = {silent = true, noremap = true}
-			vim.keymap.set('n', '<leader>xx', '<cmd>TroubleToggle<cr>', opts)
-			vim.keymap.set('n', '<leader>xw', '<cmd>TroubleToggle workspace_diagnostics<cr>', opts)
-			vim.keymap.set('n', '<leader>xd', '<cmd>TroubleToggle document_diagnostics<cr>', opts)
-			vim.keymap.set('n', '<leader>xq', '<cmd>TroubleToggle quickfix<cr>', opts)
-			vim.keymap.set('n', 'gR', '<cmd>TroubleToggle lsp_references<cr>', opts)
-		end,
+		cmd = { "TodoTrouble", "TodoTelescope" },
+		event = { "BufReadPost", "BufNewFile" },
+		config = true,
 		keys = {
-			{"<leader>x", desc = "Trouble"}
+			{"<leader>xx", "<cmd>TroubleToggle<cr>", desc = "Toggle Touble"},
+			{"<leader>xw", "<cmd>TroubleToggle workspace_diagnostics<cr>", desc = "Workspace Diagnostics"},
+			{"<leader>xd", "<cmd>TroubleToggle document_diagnostics<cr>", desc = "Document Diagnostics"},
+			{"<leader>xq", "<cmd>TroubleToggle quickfix<cr>", desc = "Quickfixes"},
+			{"gR", "<cmd>TroubleToggle lsp_references<cr>", desc = "Lsp References"},
 		},
 	},
 }

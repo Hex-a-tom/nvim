@@ -109,10 +109,6 @@ return {
 				line = '<leader>cc',
 				block = '<leader>cb',
 			},
-			opleader = {
-				line = 'cc',
-				block = 'cb',
-			},
 			mappings = {
 				basic = true,
 				extra = false,
@@ -121,7 +117,6 @@ return {
 		keys = {
 			{"<leader>cc", desc = "Toggle Line Comment"},
 			{"<leader>cb", desc = "Toggle Block Comment"},
-			{"<leader>c", desc = "Comment"},
 		},
 		event = "VeryLazy"
 	},
@@ -131,5 +126,12 @@ return {
 		init = function ()
 			vim.keymap.set('n', '<F3>', '<cmd>UndotreeToggle<CR>', {silent = true, noremap = true})
 		end
+	},
+	{
+		"nvim-pack/nvim-spectre",
+		-- stylua: ignore
+		keys = {
+			{ "<leader>sr", function() require("spectre").open() end, desc = "Replace in files (Spectre)" },
+		},
 	},
 }

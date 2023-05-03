@@ -1,11 +1,29 @@
 return {
 	{
-		-- TODO: Stop from openeing when no executable is selected
+		-- TODO: Stop from opening when no executable is selected
 		"rcarriga/nvim-dap-ui",
 		lazy = true,
+		keys = {
+			{"<leader>du", "<cmd>lua require'dapui'.toggle<CR>", desc = "Toggle debug ui"},
+			{"<leader>di", "<cmd>lua require'dapui'.eval<CR>", desc = "Eval"},
+		},
+		config = function()
+			local dap = require("dap")
+			local dapui = require("dapui")
+			dapui.setup()
+
+			dap.listeners.after.event_initialized["dapui_config"] = function()
+				dapui.open()
+			end
+			dap.listeners.before.event_terminated["dapui_config"] = function()
+				dapui.close()
+			end
+			dap.listeners.before.event_exited["dapui_config"] = function()
+				dapui.close()
+			end
+		end
 	},
 	{
-		-- TODO: Make breakpoint look better
 		"mfussenegger/nvim-dap",
 		keys = {
 			{"<F5>", "<cmd>lua require'dap'.continue()<CR>", desc = "Continue"},
@@ -17,18 +35,33 @@ return {
 			{"<leader>dp", "<cmd>lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))", desc = "Set breakpoint"},
 			{"<leader>dr", "<cmd>lua require'dap'.repl.open()<CR>", desc = "Debug repl"},
 			{"<leader>dl", "<cmd>lua require'dap'.run_last()<CR>", desc = "Run last"},
-			{"<leader>du", "<cmd>lua require'dapui'.toggle()<CR>", desc = "Toggle debug ui"},
 		},
 		dependencies = {
 			"nvim-dap-ui",
 		},
 		config = function ()
+			-- TODO: include meson debuggers
 			local dap = require('dap')
 			dap.adapters.lldb = {
 				type = 'executable',
 				command = '/usr/bin/lldb-vscode', -- adjust as needed, must be absolute path
 				name = 'lldb'
 			}
+
+			local icons = {
+				Stopped = { " ", "DiagnosticWarn", "DapStoppedLine" },
+				Breakpoint = " ",
+				BreakpointCondition = " ",
+				BreakpointRejected = { " ", "DiagnosticError" },
+				LogPoint = ".>",
+			}
+			for name, sign in pairs(icons) do
+				sign = type(sign) == "table" and sign or { sign }
+				vim.fn.sign_define(
+				"Dap" .. name,
+				{ text = sign[1], texthl = sign[2] or "DiagnosticInfo", linehl = sign[3], numhl = sign[3] }
+				)
+			end
 
 			dap.configurations.cpp = {
 				{
@@ -63,18 +96,6 @@ return {
 			dap.configurations.c = dap.configurations.cpp
 			dap.configurations.rust = dap.configurations.cpp
 
-			local dapui = require("dapui")
-			dapui.setup()
-
-			dap.listeners.after.event_initialized["dapui_config"] = function()
-				dapui.open()
-			end
-			dap.listeners.before.event_terminated["dapui_config"] = function()
-				dapui.close()
-			end
-			dap.listeners.before.event_exited["dapui_config"] = function()
-				dapui.close()
-			end
 		end
 	},
 }

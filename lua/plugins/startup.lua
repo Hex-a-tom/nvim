@@ -16,7 +16,24 @@ return {
 	},
 	{
 		"folke/which-key.nvim",
-		config = true,
+		opts = {
+			plugins = { spelling = true },
+			defaults = {
+				mode = { "n", "v" },
+				["<leader>f"] = { name = "+file/find" },
+				["<leader>g"] = { name = "+git" },
+				["<leader>x"] = { name = "+diagnostics/quickfix" },
+				["<leader>c"] = { name = "+comments" },
+				["<leader>l"] = { name = "+lsp" },
+				["<leader>d"] = { name = "+debug" },
+				["<leader>s"] = { name = "+find and replace" },
+			},
+		},
+		config = function(_, opts)
+			local wk = require("which-key")
+			wk.setup(opts)
+			wk.register(opts.defaults)
+		end,
 	},
 	{ "folke/neoconf.nvim", cmd = "Neoconf" },
 	{ "nvim-tree/nvim-web-devicons", lazy = true },

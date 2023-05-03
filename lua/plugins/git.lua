@@ -33,7 +33,6 @@ return {
 		},
 		keys = {
 			{ "<leader>gg", "<Cmd>Neogit<CR>", desc = "Start Neogit"},
-			{ "<leader>g", desc = "Neogit"},
 		}
 	}
 }
