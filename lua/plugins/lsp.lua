@@ -110,7 +110,7 @@ return {
 			"neodev.nvim"
 		},
 		config = function ()
-			local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+			local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
 			for type, icon in pairs(signs) do
 				local hl = "DiagnosticSign" .. type
 				vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
@@ -184,7 +184,35 @@ return {
 	{
 		"SmiteshP/nvim-navic",
 		opts = {
-			separator = "  "
+			separator = "  ",
+			icons = {
+				File          = " ",
+				Module        = " ",
+				Namespace     = " ",
+				Package       = " ",
+				Class         = " ",
+				Method        = " ",
+				Property      = " ",
+				Field         = " ",
+				Constructor   = " ",
+				Enum          = " ",
+				Interface     = " ",
+				Function      = " ",
+				Variable      = " ",
+				Constant      = " ",
+				String        = " ",
+				Number        = " ",
+				Boolean       = " ",
+				Array         = " ",
+				Object        = " ",
+				Key           = " ",
+				Null          = " ",
+				EnumMember    = " ",
+				Struct        = " ",
+				Event         = " ",
+				Operator      = " ",
+				TypeParameter = " ",
+			}
 		},
 		lazy = true,
 	},
