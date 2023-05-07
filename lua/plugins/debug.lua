@@ -1,6 +1,5 @@
 return {
 	{
-		-- TODO: Stop from opening when no executable is selected
 		"rcarriga/nvim-dap-ui",
 		lazy = true,
 		keys = {
@@ -38,16 +37,29 @@ return {
 		},
 		dependencies = {
 			"nvim-dap-ui",
+			-- mason.nvim integration
+			{
+				"jay-babu/mason-nvim-dap.nvim",
+				dependencies = "mason.nvim",
+				cmd = { "DapInstall", "DapUninstall" },
+				opts = {
+					-- Makes a best effort to setup the various debuggers with
+					-- reasonable debug configurations
+					automatic_setup = true,
+
+					-- You can provide additional configuration to the handlers,
+					-- see mason-nvim-dap README for more information
+					handlers = {},
+
+					-- You'll need to check that you have the required things installed
+					-- online, please don't ask me how to install them :)
+					ensure_installed = {
+						"cpptools"
+					},
+				},
+			},
 		},
 		config = function ()
-			-- TODO: include meson debuggers
-			local dap = require('dap')
-			dap.adapters.lldb = {
-				type = 'executable',
-				command = '/usr/bin/lldb-vscode', -- adjust as needed, must be absolute path
-				name = 'lldb'
-			}
-
 			local icons = {
 				Stopped = { " ", "DiagnosticWarn", "DapStoppedLine" },
 				Breakpoint = " ",
@@ -62,40 +74,37 @@ return {
 				{ text = sign[1], texthl = sign[2] or "DiagnosticInfo", linehl = sign[3], numhl = sign[3] }
 				)
 			end
-
-			dap.configurations.cpp = {
-				{
-					name = 'Launch',
-					type = 'lldb',
-					request = 'launch',
-					-- TODO: fix program selection function
-					program = function()
-						return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-					end,
-					cwd = '${workspaceFolder}',
-					stopOnEntry = false,
-					args = {},
-
-					-- 💀
-					-- if you change `runInTerminal` to true, you might need to change the yama/ptrace_scope setting:
-					--
-					--    echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
-					--
-					-- Otherwise you might get the following error:
-					--
-					--    Error on launch: Failed to attach to the target process
-					--
-					-- But you should be aware of the implications:
-					-- https://www.kernel.org/doc/html/latest/admin-guide/LSM/Yama.html
-					-- runInTerminal = false,
-				},
-			}
-
-			-- If you want to use this for Rust and C, add something like this:
-
-			dap.configurations.c = dap.configurations.cpp
-			dap.configurations.rust = dap.configurations.cpp
-
 		end
+	},
+	-- cmdline tools and lsp servers
+	{
+		-- Source: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/lsp/init.lua
+		"williamboman/mason.nvim",
+		cmd = "Mason",
+		keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
+		opts = {
+			ensure_installed = {
+				-- "stylua",
+				-- "shfmt",
+				-- "flake8",
+			},
+		},
+		config = function(_, opts)
+			require("mason").setup(opts)
+			local mr = require("mason-registry")
+			local function ensure_installed()
+				for _, tool in ipairs(opts.ensure_installed) do
+					local p = mr.get_package(tool)
+					if not p:is_installed() then
+						p:install()
+					end
+				end
+			end
+			if mr.refresh then
+				mr.refresh(ensure_installed)
+			else
+				ensure_installed()
+			end
+		end,
 	},
 }

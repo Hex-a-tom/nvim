@@ -9,7 +9,6 @@ return {
 		end
 	},
 	{
-		-- TODO: Fix confirmation dialog
 		"TimUntersberger/neogit",
 		opts = {
 			disable_commit_confirmation = true,
