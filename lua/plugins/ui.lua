@@ -85,6 +85,7 @@ return {
 	},
 	{
 		-- TODO: Fix error when exit last non terminal window
+		-- TODO: Fix a lot of broken stuff
 		"akinsho/toggleterm.nvim",
 		version = "*",
 		opts = {
@@ -107,6 +108,10 @@ return {
 		},
 	},
 	{
+		'stevearc/dressing.nvim',
+		opts = {},
+	},
+	{
 		"rcarriga/nvim-notify",
 		config = function ()
 			vim.notify = require("notify")
@@ -117,6 +122,7 @@ return {
 		dependencies = {
 			"MunifTanjim/nui.nvim"
 		},
+		enabled = false,
 		opts = {
 			cmdline = {
 				view = "cmdline",
@@ -165,16 +171,16 @@ return {
 		version = "0.1.*",
 		cmd = "Telescope",
 		keys = {
-			{"<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find Files"},
+			{"<leader><leader>", "<cmd>Telescope find_files<cr>", desc = "Find Files"},
 			{"<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Live Grep"},
-			{"<leader>fb", "<cmd>Telescope file_browser<cr>", desc = "File Browser"},
+			{"<leader>.", "<cmd>Telescope file_browser<cr>", desc = "File Browser"},
 			{"<leader>fh", "<cmd>Telescope help_tags<cr>", desc = "Helpfiles"},
 			{"<leader>fo", "<cmd>Telescope oldfiles<cr>", desc = "Oldfiles"},
 			{"<leader>ft", "<cmd>TodoTelescope<cr>", desc = "Todo"},
 			{"<leader>p", "<cmd>Telescope neoclip<cr>", desc = "Neoclip"},
 			{"<leader>fp", "<cmd>Telescope projects<cr>", desc = "Projects"},
 			{"<leader>:", "<cmd>Telescope command_history<cr>", desc = "Command History" },
-			{"<leader>fB", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
+			{"<leader>bi", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
 			{"<leader>fa", "<cmd>Telescope autocommands<cr>", desc = "Auto Commands" },
 			{"<leader>xD", "<cmd>Telescope diagnostics bufnr=0<cr>", desc = "Document diagnostics" },
 			{"<leader>xW", "<cmd>Telescope diagnostics<cr>", desc = "Workspace diagnostics" },

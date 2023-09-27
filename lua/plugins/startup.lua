@@ -11,8 +11,8 @@ return {
 		name = "catppuccin",
 		priority = 1000,
 		config = function ()
-			vim.cmd([[colorscheme catppuccin-macchiato]])
-		end
+			vim.cmd([[colorscheme catppuccin-frappe]])
+		end,
 	},
 	{
 		"folke/which-key.nvim",
@@ -27,6 +27,7 @@ return {
 				["<leader>l"] = { name = "+lsp" },
 				["<leader>d"] = { name = "+debug" },
 				["<leader>s"] = { name = "+find and replace" },
+				["<leader>b"] = { name = "+buffer" },
 			},
 		},
 		config = function(_, opts)

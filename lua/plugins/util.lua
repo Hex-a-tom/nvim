@@ -46,6 +46,11 @@ return {
 			vim.g.pear_tree_ft_disabled = {"TelescopePrompt"}
 		end,
 		event = "InsertEnter",
+		enabled = false,
+	},
+	{
+		"jiangmiao/auto-pairs",
+		event = "InsertEnter",
 	},
 	{
 		"lukas-reineke/indent-blankline.nvim",
