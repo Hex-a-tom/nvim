@@ -117,6 +117,7 @@ return {
 			end
 		end,
 		keys = {
+			{"<leader>la", vim.lsp.buf.code_action, desc = "Code Actions"},
 			{"<leader>lx", vim.lsp.buf.declaration, desc = "Declaration"},
 			{"<leader>ld", "<cmd>Telescope lsp_definitions<CR>", desc = "Definition"},
 			{"<leader>li", "<cmd>Telescope lsp_implementations<CR>", desc = "Implementations"},
@@ -133,7 +134,7 @@ return {
 		config = function ()
 			require'nvim-treesitter.configs'.setup {
 				-- A list of parser names, or "all"
-				ensure_installed = { "c", "lua", "rust", "scala", "c_sharp" },
+				ensure_installed = { "c", "lua", "rust"},
 
 				-- Install parsers synchronously (only applied to `ensure_installed`)
 				sync_install = false,
@@ -278,7 +279,7 @@ return {
 							cmp.select_next_item()
 							-- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable() 
 							-- they way you will only jump inside the snippet region
-						elseif luasnip.expand_or_jumpable() then
+						elseif luasnip.expand_or_locally_jumpable() then
 							luasnip.expand_or_jump()
 						elseif has_words_before() then
 							cmp.complete()
