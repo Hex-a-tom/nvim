@@ -36,7 +36,6 @@ return {
 			wk.register(opts.defaults)
 		end,
 	},
-	{ "folke/neoconf.nvim", cmd = "Neoconf" },
 	{ "nvim-tree/nvim-web-devicons", lazy = true },
 	{
 		"goolord/alpha-nvim",

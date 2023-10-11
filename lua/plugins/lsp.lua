@@ -37,7 +37,8 @@ return {
 			}
 		end,
 		dependencies = {
-			"nvim-cmp"
+			"nvim-cmp",
+			"nvim-lspconfig"
 		}
 	},
 	{
@@ -68,7 +69,8 @@ return {
 			})
 		end,
 		dependencies = {
-			"nvim-cmp"
+			"nvim-cmp",
+			"nvim-navic"
 		}
 	},
 	{
@@ -104,10 +106,23 @@ return {
 		}
 	},
 	{
+		'VonHeikemen/lsp-zero.nvim',
+		branch = 'v3.x',
+		lazy = true,
+		config = false,
+		init = function()
+			-- Disable automatic setup, we are doing it manually
+			vim.g.lsp_zero_extend_cmp = 0
+			vim.g.lsp_zero_extend_lspconfig = 0
+		end,
+	},
+	{
 		"https://github.com/neovim/nvim-lspconfig",
-		event = "VeryLazy",
+		cmd = {'LspInfo', 'LspInstall', 'LspStart'},
+		event = {'BufReadPre', 'BufNewFile'},
 		dependencies = {
-			"neodev.nvim"
+			{'hrsh7th/cmp-nvim-lsp'},
+			{'williamboman/mason-lspconfig.nvim'},
 		},
 		config = function ()
 			local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
@@ -115,6 +130,53 @@ return {
 				local hl = "DiagnosticSign" .. type
 				vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 			end
+
+			local lsp_zero = require("lsp-zero")
+			lsp_zero.extend_lspconfig()
+
+			local on_attach = function (client, bufnr)
+				lsp_zero.default_keymaps({buffer = bufnr})
+
+				if client.server_capabilities.documentSymbolProvider then
+					require("nvim-navic").attach(client, bufnr)
+				end
+			end
+
+			lsp_zero.on_attach(on_attach)
+
+			-- Set up lspconfig.
+			local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+			-- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
+			local servers = {'bashls'}
+			for _, lsp in pairs(servers) do
+				require('lspconfig')[lsp].setup {
+					capabilities = capabilities,
+					on_attach = on_attach
+				}
+			end
+
+			require('lspconfig').ccls.setup {
+				capabilities = capabilities,
+				init_options = {
+					compilationDatabaseDirectory = "build";
+					index = {
+						threads = 0;
+					};
+					clang = {
+						excludeArgs = { "-frounding-math"} ;
+					};
+				},
+				on_attach = on_attach,
+			}
+
+
+			require("mason-lspconfig").setup({
+				ensure_installed = {},
+				handlers = {
+					lsp_zero.default_setup,
+					jdtls = lsp_zero.noop,
+				}
+			})
 		end,
 		keys = {
 			{"<leader>la", vim.lsp.buf.code_action, desc = "Code Actions"},
@@ -169,8 +231,11 @@ return {
 	},
 	{
 		"j-hui/fidget.nvim",
-		config = true,
-		event = "InsertEnter",
+		tag = "legacy",
+		event = "LspAttach",
+		opts = {
+			-- options
+		},
 	},
 	{
 		"L3MON4D3/LuaSnip",
@@ -216,6 +281,13 @@ return {
 		},
 		lazy = true,
 	},
+	-- cmdline tools and lsp servers
+	{
+		-- Source: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/lsp/init.lua
+		"williamboman/mason.nvim",
+		lazy = false,
+		config = true,
+	},
 	{
 		"hrsh7th/nvim-cmp",
 		-- load cmp on InsertEnter
@@ -249,6 +321,9 @@ return {
 				return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 			end
 
+			local lsp_zero = require("lsp-zero")
+			lsp_zero.extend_cmp()
+
 			cmp.setup({
 				snippet = {
 					-- REQUIRED - you must specify a snippet engine
@@ -277,7 +352,7 @@ return {
 					['<Tab>'] = cmp.mapping(function (fallback)
 						if cmp.visible() then
 							cmp.select_next_item()
-							-- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable() 
+							-- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
 							-- they way you will only jump inside the snippet region
 						elseif luasnip.expand_or_locally_jumpable() then
 							luasnip.expand_or_jump()
@@ -347,43 +422,6 @@ return {
 					{ name = 'cmdline' }
 				})
 			})
-
-			local on_attach = function(client, bufnr)
-				if client.server_capabilities.documentSymbolProvider then
-					require("nvim-navic").attach(client, bufnr)
-				end
-			end
-
-			-- Set up lspconfig.
-			local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
-			-- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
-			local servers = {'bashls'}
-			for _, lsp in pairs(servers) do
-				require('lspconfig')[lsp].setup {
-					capabilities = capabilities,
-					on_attach = on_attach
-				}
-			end
-
-			require('lspconfig').ccls.setup {
-				capabilities = capabilities,
-				init_options = {
-					compilationDatabaseDirectory = "build";
-					index = {
-						threads = 0;
-					};
-					clang = {
-						excludeArgs = { "-frounding-math"} ;
-					};
-				},
-				on_attach = on_attach,
-			}
-
-			require('lspconfig').omnisharp.setup{
-				capabilities = capabilities,
-				cmd = {"omnisharp"},
-				on_attach = on_attach
-			}
 
 			vim.cmd([[
 			highlight! PmenuSel guibg=#282C34 guifg=NONE
