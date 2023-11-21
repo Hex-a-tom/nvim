@@ -2,6 +2,10 @@ return {
 	{
 		"airblade/vim-gitgutter",
 		event = "VeryLazy",
+		keys = {
+			{ "<leader>gj", "<cmd>GitGutterPrevHunk<cr>", desc = "Next Hunk" },
+			{ "<leader>gk", "<cmd>GitGutterNextHunk<cr>", desc = "Prev Hunk" },
+		},
 		config = function ()
 			vim.o.updatetime = 300
 			-- vim.o.incsearch = false

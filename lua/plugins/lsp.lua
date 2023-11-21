@@ -53,6 +53,9 @@ return {
 			local rt = require("rust-tools")
 
 			rt.setup({
+				tools = {
+					executor = require("rust-tools.executors").toggleterm,
+				},
 				on_initialized = function(health)
 					vim.notify("Started rust-analyzer with status: " .. health)
 				end,
@@ -61,7 +64,11 @@ return {
 						-- Hover actions
 						vim.keymap.set("n", "<leader>ll", rt.hover_actions.hover_actions, { buffer = bufnr })
 						-- Code action groups
-						vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+						vim.keymap.set("n", "<Leader>la", rt.code_action_group.code_action_group, { buffer = bufnr })
+						vim.keymap.set("n", "<Leader>lR", "<cmd>RustRunnables<cr>", { buffer = bufnr, desc = "Run" })
+						vim.keymap.set("n", "<Leader>lc", rt.open_cargo_toml.open_cargo_toml, { buffer = bufnr, desc = "Open Config" })
+						vim.keymap.set("n", "<Leader>ls", "<cmd>!rustup doc std<cr><cr>", { buffer = bufnr, desc = "Std Documentation", silent = true })
+						vim.keymap.set("n", "<Leader>lD", '<cmd>!xdg-open "https://docs.rs/"<cr><cr>', { buffer = bufnr, desc = "Documentation", silent = true })
 						require("nvim-navic").attach(client, bufnr)
 					end,
 					capabilities = capabilities,
@@ -75,8 +82,8 @@ return {
 	},
 	{
 		"saecki/crates.nvim",
-		ft = "toml",
-		version = "0.3.0",
+		event = { "BufRead Cargo.toml" },
+		tag = "v0.4.0",
 		config = function ()
 			local crates = require('crates')
 			crates.setup()
@@ -239,7 +246,7 @@ return {
 	},
 	{
 		"L3MON4D3/LuaSnip",
-		version = "1.*",
+		version = "2.*",
 		build = "make install_jsregexp",
 		lazy = true,
 		dependencies = {
@@ -325,6 +332,7 @@ return {
 			lsp_zero.extend_cmp()
 
 			cmp.setup({
+				preselect = cmp.PreselectMode.None,
 				snippet = {
 					-- REQUIRED - you must specify a snippet engine
 					expand = function(args)
@@ -375,7 +383,7 @@ return {
 				sources = cmp.config.sources({
 					{ name = 'nvim_lsp' },
 					-- { name = 'vsnip' }, -- For vsnip users.
-					{ name = 'luasnip', priority = 5 }, -- For luasnip users.
+					{ name = 'luasnip', priority = 4 }, -- For luasnip users.
 					-- { name = 'ultisnips' }, -- For ultisnips users.
 					-- { name = 'snippy' }, -- For snippy users.
 					{ name = "crates" },

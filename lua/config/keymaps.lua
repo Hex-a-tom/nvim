@@ -13,12 +13,12 @@ map("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease window wi
 map("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase window width" })
 
 -- Move Lines
-map("n", "<A-j>", "<cmd>m .+1<cr>==", { desc = "Move down" })
-map("n", "<A-k>", "<cmd>m .-2<cr>==", { desc = "Move up" })
-map("i", "<A-j>", "<esc><cmd>m .+1<cr>==gi", { desc = "Move down" })
-map("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move up" })
-map("v", "<A-j>", ":m '>+1<cr>gv=gv", { desc = "Move down" })
-map("v", "<A-k>", ":m '<-2<cr>gv=gv", { desc = "Move up" })
+map("n", "<C-j>", "<cmd>m .+1<cr>==", { desc = "Move down" })
+map("n", "<C-k>", "<cmd>m .-2<cr>==", { desc = "Move up" })
+map("i", "<C-j>", "<esc><cmd>m .+1<cr>==gi", { desc = "Move down" })
+map("i", "<C-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move up" })
+map("v", "<C-j>", ":m '>+1<cr>gv=gv", { desc = "Move down" })
+map("v", "<C-k>", ":m '<-2<cr>gv=gv", { desc = "Move up" })
 
 -- buffers
 map("n", "<A-,>", "<cmd>BufferLineCyclePrev<cr>", { desc = "Prev buffer" })
@@ -53,6 +53,26 @@ map({ "i", "v", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save file" })
 -- better indenting
 map("v", "<", "<gv")
 map("v", ">", ">gv")
+
+-- indent text when pasting
+map("n", "p", "p'[v']=")
+
+-- saner behavior of visual mode paste
+map("x", "p", "P")
+
+-- multible cursor emulation
+map("n", "c*", "*``cgn")
+map("n", "c#", "#``cgn")
+
+-- redo
+map("n", "<S-U>", "<C-R>")
+
+-- easier start and end of line
+map("n", "H", "^")
+map("n", "L", "$")
+
+-- throwaway macro
+map("n", "Q", "@q")
 
 -- quit
 map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit all" })
