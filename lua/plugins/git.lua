@@ -21,22 +21,66 @@ return {
 				-- The diffview integration enables the diff popup, which is a wrapper around `sindrets/diffview.nvim`.
 				--
 				-- Requires you to have `sindrets/diffview.nvim` installed.
-				-- use { 
-				--   'TimUntersberger/neogit', 
-				--   requires = { 
-				--     'nvim-lua/plenary.nvim',
-				--     'sindrets/diffview.nvim' 
-				--   }
-				-- }
 				diffview = true
 			},
 		},
 		dependencies = {
-			"sindrets/diffview.nvim",
+			"diffview.nvim",
 			"nvim-lua/plenary.nvim",
 		},
 		keys = {
 			{ "<leader>gg", "<Cmd>Neogit<CR>", desc = "Start Neogit"},
 		}
+	},
+	{
+		"sindrets/diffview.nvim",
+		keys = {
+			{ "<leader>gd", "<Cmd>DiffviewOpen<cr>", desc = "Open git diff" },
+			{ "<leader>gh", "<Cmd>DiffviewFileHistory<cr>", desc = "Open file history" },
+			{ "<leader>gc", "<Cmd>DiffviewClose<cr>", desc = "Close git diff" },
+		},
+		cmd = {
+			"DiffviewOpen",
+			"DiffviewFileHistory",
+			"DiffviewToggleFiles",
+			"DiffviewClose",
+			"DiffviewFocusFiles",
+			"DiffviewLog",
+			"DiffviewRefresh",
+		},
+		opts = {
+			diff_binaries = false,    -- Show diffs for binaries
+			enhanced_diff_hl = true, -- See ':h diffview-config-enhanced_diff_hl'
+			git_cmd = { "git" },      -- The git executable followed by default args.
+			hg_cmd = { "hg" },        -- The hg executable followed by default args.
+			use_icons = true,         -- Requires nvim-web-devicons
+			show_help_hints = true,   -- Show hints for how to open the help panel
+			watch_index = true,       -- Update views and index buffers when the git index changes.
+			icons = {                 -- Only applies when use_icons is true.
+				folder_closed = "",
+				folder_open = "",
+			},
+			signs = {
+				fold_closed = "",
+				fold_open = "",
+				done = "✓",
+			},
+			hooks = {
+				diff_buf_win_enter = function (bufnr, winid, ctx)
+					-- Highlight 'DiffChange' as 'DiffDelete' on the left, and 'DiffAdd' on
+					-- the right.
+					if ctx.layout_name:match("^diff2") then
+						vim.opt_local.winhl = table.concat({
+							"DiffDelete:Whitespace",
+						}, ",")
+					end
+				end
+			}
+		},
+		config = function (_, opts)
+			vim.opt.fillchars:append { diff = "╱" }
+
+			require("diffview").setup(opts)
+		end
 	}
 }
