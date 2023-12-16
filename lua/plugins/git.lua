@@ -35,9 +35,10 @@ return {
 	{
 		"sindrets/diffview.nvim",
 		keys = {
-			{ "<leader>gd", "<Cmd>DiffviewOpen<cr>", desc = "Open git diff" },
-			{ "<leader>gh", "<Cmd>DiffviewFileHistory<cr>", desc = "Open file history" },
-			{ "<leader>gc", "<Cmd>DiffviewClose<cr>", desc = "Close git diff" },
+			{ "<leader>gd", "<Cmd>DiffviewOpen<cr>", desc = "Open diff view" },
+			{ "<leader>gh", "<Cmd>DiffviewFileHistory<cr>", desc = "Open project history" },
+			{ "<leader>gf", "<Cmd>DiffviewFileHistory %<cr>", desc = "Open file history" },
+			{ "<leader>gc", "<Cmd>DiffviewClose<cr>", desc = "Close diff view" },
 		},
 		cmd = {
 			"DiffviewOpen",
@@ -50,7 +51,7 @@ return {
 		},
 		opts = {
 			diff_binaries = false,    -- Show diffs for binaries
-			enhanced_diff_hl = true, -- See ':h diffview-config-enhanced_diff_hl'
+			enhanced_diff_hl = false, -- See ':h diffview-config-enhanced_diff_hl'
 			git_cmd = { "git" },      -- The git executable followed by default args.
 			hg_cmd = { "hg" },        -- The hg executable followed by default args.
 			use_icons = true,         -- Requires nvim-web-devicons

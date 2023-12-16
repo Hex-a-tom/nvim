@@ -3,8 +3,8 @@ return {
 		"rcarriga/nvim-dap-ui",
 		lazy = true,
 		keys = {
-			{"<leader>du", "<cmd>lua require'dapui'.toggle<CR>", desc = "Toggle debug ui"},
-			{"<leader>di", "<cmd>lua require'dapui'.eval<CR>", desc = "Eval"},
+			{"<leader>du", "<cmd>lua require'dapui'.toggle()<CR>", desc = "Toggle debug ui"},
+			{"<leader>di", "<cmd>lua require'dapui'.eval()<CR>", desc = "Eval"},
 		},
 		config = function()
 			local dap = require("dap")
@@ -41,7 +41,6 @@ return {
 			{
 				"jay-babu/mason-nvim-dap.nvim",
 				dependencies = "mason.nvim",
-				cmd = { "DapInstall", "DapUninstall" },
 				opts = {
 					-- Makes a best effort to setup the various debuggers with
 					-- reasonable debug configurations
@@ -57,6 +56,9 @@ return {
 						"cpptools"
 					},
 				},
+				config = function (_, opts)
+					require("mason-nvim-dap").setup(opts)
+				end
 			},
 		},
 		config = function ()

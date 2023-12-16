@@ -118,7 +118,7 @@ return {
 					-- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
 					-- Using this option may slow down your editor, and you may see some duplicate highlights.
 					-- Instead of true it can also be a list of languages
-					additional_vim_regex_highlighting = {'org'},
+					-- additional_vim_regex_highlighting = {},
 				},
 			}
 		end,
@@ -213,7 +213,9 @@ return {
 		-- Source: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/lsp/init.lua
 		"williamboman/mason.nvim",
 		lazy = false,
-		config = true,
+		config = function ()
+			require("mason").setup()
+		end,
 	},
 	{
 		"hrsh7th/nvim-cmp",
@@ -307,7 +309,7 @@ return {
 					-- { name = 'ultisnips' }, -- For ultisnips users.
 					-- { name = 'snippy' }, -- For snippy users.
 					{ name = "crates" },
-					{ name = "neorg" },
+					-- { name = "neorg" },
 				}, {
 					{ name = 'buffer', priority = 0.5 },
 				}),
