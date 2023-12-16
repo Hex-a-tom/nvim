@@ -114,6 +114,7 @@ return {
 	{
 		"rcarriga/nvim-notify",
 		config = function ()
+			require("notify").setup()
 			vim.notify = require("notify")
 		end,
 	},
@@ -221,6 +222,7 @@ return {
 			telescope.load_extension "file_browser"
 			telescope.load_extension("ui-select")
 			telescope.load_extension('fzf')
+			telescope.load_extension("notify")
 		end
 	}
 }
