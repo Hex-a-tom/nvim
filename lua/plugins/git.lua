@@ -9,8 +9,23 @@ return {
 		config = function ()
 			vim.o.updatetime = 300
 			-- vim.o.incsearch = false
-			vim.wo.signcolumn = 'yes'
-		end
+			vim.wo.signcolumn = 'yes:1'
+		end,
+		enabled = false,
+	},
+	{
+		"lewis6991/gitsigns.nvim",
+		event = "VeryLazy",
+		opts = {
+			signs = {
+				add          = { text = '▎' },
+				change       = { text = '▎' },
+				delete       = { text = '_' },
+				topdelete    = { text = '‾' },
+				changedelete = { text = '~' },
+				untracked    = { text = '┆' },
+			},
+		},
 	},
 	{
 		"TimUntersberger/neogit",
