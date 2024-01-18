@@ -28,6 +28,7 @@ return {
 				["<leader>d"] = { name = "+debug" },
 				["<leader>s"] = { name = "+find and replace" },
 				["<leader>b"] = { name = "+buffer" },
+				["<leader>o"] = { name = "+open" },
 			},
 		},
 		config = function(_, opts)

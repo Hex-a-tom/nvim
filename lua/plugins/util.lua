@@ -138,11 +138,6 @@ return {
 		end
 	},
 	{
-		"cohama/lexima.vim",
-		event = "InsertEnter",
-		enabled = false,
-	},
-	{
 		"lukas-reineke/indent-blankline.nvim",
 		main = "ibl",
 		opts = {
@@ -188,15 +183,5 @@ return {
 		keys = {
 			{ "<leader>sr", function() require("spectre").open() end, desc = "Replace in files (Spectre)" },
 		},
-	},
-	{
-		'stevearc/oil.nvim',
-		opts = {},
-		cmd = "Oil",
-		keys = {
-			{ "<leader>fb", "<cmd>Oil<cr>", desc = "File browser (Oil)" }
-		},
-		-- Optional dependencies
-		dependencies = { "nvim-tree/nvim-web-devicons" },
 	},
 }

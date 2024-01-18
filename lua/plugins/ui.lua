@@ -88,11 +88,13 @@ return {
 		-- TODO: Fix a lot of broken stuff
 		"akinsho/toggleterm.nvim",
 		version = "*",
+		cmd = "ToggleTerm",
 		opts = {
 			open_mapping = [[<F4>]],
 		},
 		keys = {
-			{"<F4>"}
+			{"<F4>"},
+			{"<leader>ot", "<cmd>ToggleTerm<cr>", desc = "ToggleTerm"},
 		}
 	},
 	{
