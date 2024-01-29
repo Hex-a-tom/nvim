@@ -66,7 +66,11 @@ return {
 	},
 	{
 		'stevearc/oil.nvim',
-		opts = {},
+		opts = {
+			keymaps = {
+				["q"] = "actions.close",
+			}
+		},
 		cmd = "Oil",
 		keys = {
 			{ "<leader>fb", "<cmd>Oil<cr>", desc = "File browser (Oil)" },
