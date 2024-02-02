@@ -25,6 +25,26 @@ return {
 				vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 			end
 
+			vim.diagnostic.config({
+				underline = true,
+				signs = true,
+				-- virtual_text = true,
+				virtual_text = {
+					source = false,
+				},
+				float = {
+					show_header = true,
+					source = true,
+					border = "border",
+					focus = false,
+					width = 60,
+				},
+				update_in_insert = true,
+				severity_sort = true,
+			})
+
+
+			-- //////// Lsp Server Config ////////
 			local lsp_zero = require("lsp-zero")
 			lsp_zero.extend_lspconfig()
 

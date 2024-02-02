@@ -40,6 +40,7 @@ opt.smarttab = true
 opt.spelllang = { "en" }
 opt.splitbelow = true -- Put new windows below current
 opt.splitright = true -- Put new windows right of current
+opt.statuscolumn = "%s%=%{v:relnum?v:relnum:v:lnum} "
 opt.tabstop = 4
 opt.softtabstop = 4
 opt.termguicolors = true -- True color support
