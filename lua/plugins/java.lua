@@ -2,7 +2,6 @@
 local function java_attach(opts, buf)
 	opts.root_dir = require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'})
 	require('jdtls').start_or_attach(opts)
-	vim.keymap.set('n', 'lp', '<cmd>echo "hello"<cr>', { buffer = buf })
 	require("which-key").register({
 		l = {
 			o = { require("jdtls").organize_imports, "(jdtls) Organize imports" }
