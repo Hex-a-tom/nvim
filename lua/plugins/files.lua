@@ -35,6 +35,8 @@ return {
 			require('nvim-tree').setup({
 				on_attach = my_on_attach,
 				view = {
+					number = false,
+					relativenumber = false,
 					float = {
 						enable = true,
 						open_win_config = function()
@@ -60,6 +62,21 @@ return {
 					width = function()
 						return math.floor(vim.opt.columns:get() * WIDTH_RATIO)
 					end,
+				},
+				renderer = {
+					icons = {
+						glyphs = {
+							git = {
+								unstaged = "✖",
+								staged = "",
+								untracked = "",
+								ignored = "",
+								renamed = "",
+								deleted = "",
+								unmerged = "",
+							},
+						},
+					},
 				},
 			})
 		end,

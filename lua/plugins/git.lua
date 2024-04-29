@@ -31,6 +31,7 @@ return {
 		"TimUntersberger/neogit",
 		opts = {
 			disable_commit_confirmation = true,
+			disable_context_highlighting = true,
 			integrations = {
 				-- Neogit only provides inline diffs. If you want a more traditional way to look at diffs, you can use `sindrets/diffview.nvim`.
 				-- The diffview integration enables the diff popup, which is a wrapper around `sindrets/diffview.nvim`.
@@ -45,7 +46,12 @@ return {
 		},
 		keys = {
 			{ "<leader>gg", "<Cmd>Neogit<CR>", desc = "Start Neogit"},
-		}
+		},
+		config = function (_, opts)
+			vim.api.nvim_set_hl(0, "NeogitDiffAdd", {link = "DiffAdd"})
+
+			require("neogit").setup(opts)
+		end
 	},
 	{
 		"sindrets/diffview.nvim",

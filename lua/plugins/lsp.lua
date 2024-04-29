@@ -195,34 +195,35 @@ return {
 			highlight = true,
 		},
 		config = function (_, opts)
-			vim.api.nvim_set_hl(0, "NavicIconsFile",          {default = false, bg = "#181825", fg = "#7E8294"})
-			vim.api.nvim_set_hl(0, "NavicIconsModule",        {default = false, bg = "#181825", fg = "#Ae77Bf"})
-			vim.api.nvim_set_hl(0, "NavicIconsNamespace",     {default = false, bg = "#181825", fg = "#Ae77Bf"})
-			vim.api.nvim_set_hl(0, "NavicIconsPackage",       {default = false, bg = "#181825", fg = "#Ae77Bf"})
-			vim.api.nvim_set_hl(0, "NavicIconsClass",         {default = false, bg = "#181825", fg = "#ae77bf"})
-			vim.api.nvim_set_hl(0, "NavicIconsMethod",        {default = false, bg = "#181825", fg = "#6c8ed4"})
-			vim.api.nvim_set_hl(0, "NavicIconsProperty",      {default = false, bg = "#181825", fg = "#b5585f"})
-			vim.api.nvim_set_hl(0, "NavicIconsField",         {default = false, bg = "#181825", fg = "#b5585f"})
-			vim.api.nvim_set_hl(0, "NavicIconsConstructor",   {default = false, bg = "#181825", fg = "#d4bb6c"})
-			vim.api.nvim_set_hl(0, "NavicIconsEnum",          {default = false, bg = "#181825", fg = "#9fbf73"})
-			vim.api.nvim_set_hl(0, "NavicIconsInterface",     {default = false, bg = "#181825", fg = "#58b5a8"})
-			vim.api.nvim_set_hl(0, "NavicIconsFunction",      {default = false, bg = "#181825", fg = "#a377bf"})
-			vim.api.nvim_set_hl(0, "NavicIconsVariable",      {default = false, bg = "#181825", fg = "#7e8294"})
-			vim.api.nvim_set_hl(0, "NavicIconsConstant",      {default = false, bg = "#181825", fg = "#d4bb6c"})
-			vim.api.nvim_set_hl(0, "NavicIconsString",        {default = false, bg = "#181825", fg = "#9fbd73"})
-			vim.api.nvim_set_hl(0, "NavicIconsNumber",        {default = false, bg = "#181825", fg = "#9fbd73"})
-			vim.api.nvim_set_hl(0, "NavicIconsBoolean",       {default = false, bg = "#181825", fg = "#9fbd73"})
-			vim.api.nvim_set_hl(0, "NavicIconsArray",         {default = false, bg = "#181825", fg = "#9fbd73"})
-			vim.api.nvim_set_hl(0, "NavicIconsObject",        {default = false, bg = "#181825", fg = "#a377bf"})
-			vim.api.nvim_set_hl(0, "NavicIconsKey",           {default = false, bg = "#181825", fg = "#9fbd73"})
-			vim.api.nvim_set_hl(0, "NavicIconsNull",          {default = false, bg = "#181825", fg = "#9fbd73"})
-			vim.api.nvim_set_hl(0, "NavicIconsEnumMember",    {default = false, bg = "#181825", fg = "#6c8ed4"})
-			vim.api.nvim_set_hl(0, "NavicIconsStruct",        {default = false, bg = "#181825", fg = "#a377bf"})
-			vim.api.nvim_set_hl(0, "NavicIconsEvent",         {default = false, bg = "#181825", fg = "#b5585f"})
-			vim.api.nvim_set_hl(0, "NavicIconsOperator",      {default = false, bg = "#181825", fg = "#a377bf"})
-			vim.api.nvim_set_hl(0, "NavicIconsTypeParameter", {default = false, bg = "#181825", fg = "#58b5a8"})
-			-- vim.api.nvim_set_hl(0, "NavicText",               {default = true, bg = "#000000", fg = "#ffffff"})
-			-- vim.api.nvim_set_hl(0, "NavicSeparator",          {default = true, bg = "#000000", fg = "#ffffff"})
+			local bg = "#3C3836"
+			vim.api.nvim_set_hl(0, "NavicIconsFile",          {default = false, bg = bg, fg = "#7E8294"})
+			vim.api.nvim_set_hl(0, "NavicIconsModule",        {default = false, bg = bg, fg = "#Ae77Bf"})
+			vim.api.nvim_set_hl(0, "NavicIconsNamespace",     {default = false, bg = bg, fg = "#Ae77Bf"})
+			vim.api.nvim_set_hl(0, "NavicIconsPackage",       {default = false, bg = bg, fg = "#Ae77Bf"})
+			vim.api.nvim_set_hl(0, "NavicIconsClass",         {default = false, bg = bg, fg = "#ae77bf"})
+			vim.api.nvim_set_hl(0, "NavicIconsMethod",        {default = false, bg = bg, fg = "#6c8ed4"})
+			vim.api.nvim_set_hl(0, "NavicIconsProperty",      {default = false, bg = bg, fg = "#b5585f"})
+			vim.api.nvim_set_hl(0, "NavicIconsField",         {default = false, bg = bg, fg = "#b5585f"})
+			vim.api.nvim_set_hl(0, "NavicIconsConstructor",   {default = false, bg = bg, fg = "#d4bb6c"})
+			vim.api.nvim_set_hl(0, "NavicIconsEnum",          {default = false, bg = bg, fg = "#9fbf73"})
+			vim.api.nvim_set_hl(0, "NavicIconsInterface",     {default = false, bg = bg, fg = "#58b5a8"})
+			vim.api.nvim_set_hl(0, "NavicIconsFunction",      {default = false, bg = bg, fg = "#a377bf"})
+			vim.api.nvim_set_hl(0, "NavicIconsVariable",      {default = false, bg = bg, fg = "#7e8294"})
+			vim.api.nvim_set_hl(0, "NavicIconsConstant",      {default = false, bg = bg, fg = "#d4bb6c"})
+			vim.api.nvim_set_hl(0, "NavicIconsString",        {default = false, bg = bg, fg = "#9fbd73"})
+			vim.api.nvim_set_hl(0, "NavicIconsNumber",        {default = false, bg = bg, fg = "#9fbd73"})
+			vim.api.nvim_set_hl(0, "NavicIconsBoolean",       {default = false, bg = bg, fg = "#9fbd73"})
+			vim.api.nvim_set_hl(0, "NavicIconsArray",         {default = false, bg = bg, fg = "#9fbd73"})
+			vim.api.nvim_set_hl(0, "NavicIconsObject",        {default = false, bg = bg, fg = "#a377bf"})
+			vim.api.nvim_set_hl(0, "NavicIconsKey",           {default = false, bg = bg, fg = "#9fbd73"})
+			vim.api.nvim_set_hl(0, "NavicIconsNull",          {default = false, bg = bg, fg = "#9fbd73"})
+			vim.api.nvim_set_hl(0, "NavicIconsEnumMember",    {default = false, bg = bg, fg = "#6c8ed4"})
+			vim.api.nvim_set_hl(0, "NavicIconsStruct",        {default = false, bg = bg, fg = "#a377bf"})
+			vim.api.nvim_set_hl(0, "NavicIconsEvent",         {default = false, bg = bg, fg = "#b5585f"})
+			vim.api.nvim_set_hl(0, "NavicIconsOperator",      {default = false, bg = bg, fg = "#a377bf"})
+			vim.api.nvim_set_hl(0, "NavicIconsTypeParameter", {default = false, bg = bg, fg = "#58b5a8"})
+			vim.api.nvim_set_hl(0, "NavicText",               {default = true, bg = bg})
+			vim.api.nvim_set_hl(0, "NavicSeparator",          {default = true, bg = bg})
 
 			require("nvim-navic").setup(opts)
 		end,
@@ -384,48 +385,46 @@ return {
 				})
 			})
 
-			vim.cmd([[
-			highlight! PmenuSel guibg=#282C34 guifg=NONE
-			highlight! Pmenu guifg=#C5CDD9 guibg=#22252A
+			vim.api.nvim_set_hl(0, "PmenuSel", {default = false, bg="#3c3836"})
+			vim.api.nvim_set_hl(0, "Pmenu", {default = false, bg="#282828"})
 
-			highlight! CmpItemAbbrDeprecated guifg=#7E8294 guibg=NONE cterm=strikethrough
-			highlight! CmpItemAbbrMatch guifg=#82AAFF guibg=NONE cterm=bold
-			highlight! CmpItemAbbrMatchFuzzy guifg=#82AAFF guibg=NONE cterm=bold
-			highlight! CmpItemMenu guifg=#C792EA guibg=NONE" cterm=italic
+			vim.api.nvim_set_hl(0, "CmpItemAbbrDeprecated", {default = false, fg = "#7E8294", strikethrough = true})
+			vim.api.nvim_set_hl(0, "CmpItemAbbrMatch", {default = false, fg = "#82AAFF",  bold = true})
+			vim.api.nvim_set_hl(0, "CmpItemAbbrMatchFuzzy", {default = false, fg = "#82AAFF", bold = true})
+			vim.api.nvim_set_hl(0, "CmpItemMenu", {default = false, fg = "#C792EA", italic = true})
 
-			highlight! CmpItemKindField guifg=#EED8DA guibg=#B5585F
-			highlight! CmpItemKindProperty guifg=#EED8DA guibg=#B5585F
-			highlight! CmpItemKindEvent guifg=#EED8DA guibg=#B5585F
+			vim.api.nvim_set_hl(0, "CmpItemKindField", {default = false, fg = "#EED8DA", bg = "#B5585F"})
+			vim.api.nvim_set_hl(0, "CmpItemKindProperty", {default = false, fg = "#EED8DA", bg = "#B5585F"})
+			vim.api.nvim_set_hl(0, "CmpItemKindEvent", {default = false, fg = "#EED8DA", bg = "#B5585F"})
 
-			highlight! CmpItemKindText guifg=#C3E88D guibg=#9FBD73
-			highlight! CmpItemKindEnum guifg=#C3E88D guibg=#9FBD73
-			highlight! CmpItemKindKeyword guifg=#C3E88D guibg=#9FBD73
+			vim.api.nvim_set_hl(0, "CmpItemKindText", {default = false, fg = "#C3E88D", bg = "#9FBD73"})
+			vim.api.nvim_set_hl(0, "CmpItemKindEnum", {default = false, fg = "#C3E88D", bg = "#9FBD73"})
+			vim.api.nvim_set_hl(0, "CmpItemKindKeyword", {default = false, fg = "#C3E88D", bg = "#9FBD73"})
 
-			highlight! CmpItemKindConstant guifg=#FFE082 guibg=#D4BB6C
-			highlight! CmpItemKindConstructor guifg=#FFE082 guibg=#D4BB6C
-			highlight! CmpItemKindReference guifg=#FFE082 guibg=#D4BB6C
+			vim.api.nvim_set_hl(0, "CmpItemKindConstant", {default = false, fg = "#FFE082", bg = "#D4BB6C"})
+			vim.api.nvim_set_hl(0, "CmpItemKindConstructor", {default = false, fg = "#FFE082", bg = "#D4BB6C"})
+			vim.api.nvim_set_hl(0, "CmpItemKindReference", {default = false, fg = "#FFE082", bg = "#D4BB6C"})
 
-			highlight! CmpItemKindFunction guifg=#EADFF0 guibg=#A377BF
-			highlight! CmpItemKindStruct guifg=#EADFF0 guibg=#A377BF
-			highlight! CmpItemKindClass guifg=#EADFF0 guibg=#A377BF
-			highlight! CmpItemKindModule guifg=#EADFF0 guibg=#A377BF
-			highlight! CmpItemKindOperator guifg=#EADFF0 guibg=#A377BF
+			vim.api.nvim_set_hl(0, "CmpItemKindFunction", {default = false, fg = "#EADFF0", bg = "#A377BF"})
+			vim.api.nvim_set_hl(0, "CmpItemKindStruct", {default = false, fg = "#EADFF0", bg = "#A377BF"})
+			vim.api.nvim_set_hl(0, "CmpItemKindClass", {default = false, fg = "#EADFF0", bg = "#A377BF"})
+			vim.api.nvim_set_hl(0, "CmpItemKindModule", {default = false, fg = "#EADFF0", bg = "#A377BF"})
+			vim.api.nvim_set_hl(0, "CmpItemKindOperator", {default = false, fg = "#EADFF0", bg = "#A377BF"})
 
-			highlight! CmpItemKindVariable guifg=#C5CDD9 guibg=#7E8294
-			highlight! CmpItemKindFile guifg=#C5CDD9 guibg=#7E8294
+			vim.api.nvim_set_hl(0, "CmpItemKindVariable", {default = false, fg = "#C5CDD9", bg = "#7E8294"})
+			vim.api.nvim_set_hl(0, "CmpItemKindFile", {default = false, fg = "#C5CDD9", bg = "#7E8294"})
 
-			highlight! CmpItemKindUnit guifg=#F5EBD9 guibg=#D4A959
-			highlight! CmpItemKindSnippet guifg=#F5EBD9 guibg=#D4A959
-			highlight! CmpItemKindFolder guifg=#F5EBD9 guibg=#D4A959
+			vim.api.nvim_set_hl(0, "CmpItemKindUnit", {default = false, fg = "#F5EBD9", bg = "#D4A959"})
+			vim.api.nvim_set_hl(0, "CmpItemKindSnippet", {default = false, fg = "#F5EBD9", bg = "#D4A959"})
+			vim.api.nvim_set_hl(0, "CmpItemKindFolder", {default = false, fg = "#F5EBD9", bg = "#D4A959"})
 
-			highlight! CmpItemKindMethod guifg=#DDE5F5 guibg=#6C8ED4
-			highlight! CmpItemKindValue guifg=#DDE5F5 guibg=#6C8ED4
-			highlight! CmpItemKindEnumMember guifg=#DDE5F5 guibg=#6C8ED4
+			vim.api.nvim_set_hl(0, "CmpItemKindMethod", {default = false, fg = "#DDE5F5", bg = "#6C8ED4"})
+			vim.api.nvim_set_hl(0, "CmpItemKindValue", {default = false, fg = "#DDE5F5", bg = "#6C8ED4"})
+			vim.api.nvim_set_hl(0, "CmpItemKindEnumMember", {default = false, fg = "#DDE5F5", bg = "#6C8ED4"})
 
-			highlight! CmpItemKindInterface guifg=#D8EEEB guibg=#58B5A8
-			highlight! CmpItemKindColor guifg=#D8EEEB guibg=#58B5A8
-			highlight! CmpItemKindTypeParameter guifg=#D8EEEB guibg=#58B5A8
-			]])
+			vim.api.nvim_set_hl(0, "CmpItemKindInterface", {default = false, fg = "#D8EEEB", bg = "#58B5A8"})
+			vim.api.nvim_set_hl(0, "CmpItemKindColor", {default = false, fg = "#D8EEEB", bg = "#58B5A8"})
+			vim.api.nvim_set_hl(0, "CmpItemKindTypeParameter", {default = false, fg = "#D8EEEB", bg = "#58B5A8"})
 
 		end,
 	},
