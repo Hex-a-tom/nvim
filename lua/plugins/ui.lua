@@ -6,16 +6,6 @@ return {
 				globalstatus = true,
 			},
 			sections = {
-				lualine_c = {
-					{
-						function()
-							return require("nvim-navic").get_location()
-						end,
-						cond = function()
-							return require("nvim-navic").is_available()
-						end
-					},
-				},
 				lualine_y = {
 					{
 						function() return require("noice").api.status.command.get() end,
@@ -51,7 +41,6 @@ return {
 			},
 		},
 		dependencies = {
-			"nvim-navic",
 			"nvim-tree/nvim-web-devicons",
 		}
 	},

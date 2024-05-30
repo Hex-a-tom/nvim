@@ -48,12 +48,8 @@ return {
 			local lsp_zero = require("lsp-zero")
 			lsp_zero.extend_lspconfig()
 
-			local on_attach = function (client, bufnr)
+			local on_attach = function (_, bufnr)
 				lsp_zero.default_keymaps({buffer = bufnr})
-
-				if client.server_capabilities.documentSymbolProvider then
-					require("nvim-navic").attach(client, bufnr)
-				end
 			end
 
 			lsp_zero.on_attach(on_attach)
@@ -160,75 +156,6 @@ return {
 			"rafamadriz/friendly-snippets",
 		},
 	},
-	{
-		"SmiteshP/nvim-navic",
-		opts = {
-			separator = "  ",
-			icons = {
-				File          = " ",
-				Module        = " ",
-				Namespace     = " ",
-				Package       = " ",
-				Class         = " ",
-				Method        = " ",
-				Property      = " ",
-				Field         = " ",
-				Constructor   = " ",
-				Enum          = " ",
-				Interface     = " ",
-				Function      = " ",
-				Variable      = " ",
-				Constant      = " ",
-				String        = " ",
-				Number        = " ",
-				Boolean       = " ",
-				Array         = " ",
-				Object        = " ",
-				Key           = " ",
-				Null          = " ",
-				EnumMember    = " ",
-				Struct        = " ",
-				Event         = " ",
-				Operator      = " ",
-				TypeParameter = " ",
-			},
-			highlight = true,
-		},
-		config = function (_, opts)
-			local bg = "#3C3836"
-			vim.api.nvim_set_hl(0, "NavicIconsFile",          {default = false, bg = bg, fg = "#7E8294"})
-			vim.api.nvim_set_hl(0, "NavicIconsModule",        {default = false, bg = bg, fg = "#Ae77Bf"})
-			vim.api.nvim_set_hl(0, "NavicIconsNamespace",     {default = false, bg = bg, fg = "#Ae77Bf"})
-			vim.api.nvim_set_hl(0, "NavicIconsPackage",       {default = false, bg = bg, fg = "#Ae77Bf"})
-			vim.api.nvim_set_hl(0, "NavicIconsClass",         {default = false, bg = bg, fg = "#ae77bf"})
-			vim.api.nvim_set_hl(0, "NavicIconsMethod",        {default = false, bg = bg, fg = "#6c8ed4"})
-			vim.api.nvim_set_hl(0, "NavicIconsProperty",      {default = false, bg = bg, fg = "#b5585f"})
-			vim.api.nvim_set_hl(0, "NavicIconsField",         {default = false, bg = bg, fg = "#b5585f"})
-			vim.api.nvim_set_hl(0, "NavicIconsConstructor",   {default = false, bg = bg, fg = "#d4bb6c"})
-			vim.api.nvim_set_hl(0, "NavicIconsEnum",          {default = false, bg = bg, fg = "#9fbf73"})
-			vim.api.nvim_set_hl(0, "NavicIconsInterface",     {default = false, bg = bg, fg = "#58b5a8"})
-			vim.api.nvim_set_hl(0, "NavicIconsFunction",      {default = false, bg = bg, fg = "#a377bf"})
-			vim.api.nvim_set_hl(0, "NavicIconsVariable",      {default = false, bg = bg, fg = "#7e8294"})
-			vim.api.nvim_set_hl(0, "NavicIconsConstant",      {default = false, bg = bg, fg = "#d4bb6c"})
-			vim.api.nvim_set_hl(0, "NavicIconsString",        {default = false, bg = bg, fg = "#9fbd73"})
-			vim.api.nvim_set_hl(0, "NavicIconsNumber",        {default = false, bg = bg, fg = "#9fbd73"})
-			vim.api.nvim_set_hl(0, "NavicIconsBoolean",       {default = false, bg = bg, fg = "#9fbd73"})
-			vim.api.nvim_set_hl(0, "NavicIconsArray",         {default = false, bg = bg, fg = "#9fbd73"})
-			vim.api.nvim_set_hl(0, "NavicIconsObject",        {default = false, bg = bg, fg = "#a377bf"})
-			vim.api.nvim_set_hl(0, "NavicIconsKey",           {default = false, bg = bg, fg = "#9fbd73"})
-			vim.api.nvim_set_hl(0, "NavicIconsNull",          {default = false, bg = bg, fg = "#9fbd73"})
-			vim.api.nvim_set_hl(0, "NavicIconsEnumMember",    {default = false, bg = bg, fg = "#6c8ed4"})
-			vim.api.nvim_set_hl(0, "NavicIconsStruct",        {default = false, bg = bg, fg = "#a377bf"})
-			vim.api.nvim_set_hl(0, "NavicIconsEvent",         {default = false, bg = bg, fg = "#b5585f"})
-			vim.api.nvim_set_hl(0, "NavicIconsOperator",      {default = false, bg = bg, fg = "#a377bf"})
-			vim.api.nvim_set_hl(0, "NavicIconsTypeParameter", {default = false, bg = bg, fg = "#58b5a8"})
-			vim.api.nvim_set_hl(0, "NavicText",               {default = true, bg = bg})
-			vim.api.nvim_set_hl(0, "NavicSeparator",          {default = true, bg = bg})
-
-			require("nvim-navic").setup(opts)
-		end,
-		lazy = true,
-	},
 	-- cmdline tools and lsp servers
 	{
 		-- Source: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/lsp/init.lua
@@ -256,7 +183,6 @@ return {
 			"nvim-lspconfig",
 			"LuaSnip",
 			"saadparwaiz1/cmp_luasnip",
-			"nvim-navic",
 		},
 		config = function()
 			local cmp = require'cmp'

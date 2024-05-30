@@ -18,7 +18,7 @@ return {
 					vim.notify("Started rust-analyzer with status: " .. health)
 				end,
 				server = {
-					on_attach = function(client, bufnr)
+					on_attach = function(_, bufnr)
 						-- Hover actions
 						vim.keymap.set("n", "<leader>ll", rt.hover_actions.hover_actions, { buffer = bufnr })
 						-- Code action groups
@@ -27,7 +27,6 @@ return {
 						vim.keymap.set("n", "<Leader>lc", rt.open_cargo_toml.open_cargo_toml, { buffer = bufnr, desc = "Open Config" })
 						vim.keymap.set("n", "<Leader>ls", "<cmd>!rustup doc std<cr><cr>", { buffer = bufnr, desc = "Std Documentation", silent = true })
 						vim.keymap.set("n", "<Leader>lD", '<cmd>!xdg-open "https://docs.rs/"<cr><cr>', { buffer = bufnr, desc = "Documentation", silent = true })
-						require("nvim-navic").attach(client, bufnr)
 					end,
 					capabilities = capabilities,
 				},
@@ -35,7 +34,6 @@ return {
 		end,
 		dependencies = {
 			"nvim-cmp",
-			"nvim-navic"
 		}
 	},
 	{
