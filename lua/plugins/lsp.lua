@@ -56,14 +56,6 @@ return {
 
 			-- Set up lspconfig.
 			local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
-			-- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
-			local servers = {'bashls'}
-			for _, lsp in pairs(servers) do
-				require('lspconfig')[lsp].setup {
-					capabilities = capabilities,
-					on_attach = on_attach
-				}
-			end
 
 			require('lspconfig').ccls.setup {
 				capabilities = capabilities,

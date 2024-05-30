@@ -55,7 +55,7 @@ map("v", "<", "<gv")
 map("v", ">", ">gv")
 
 -- indent text when pasting
-map("n", "p", "p'[v']=")
+-- map("n", "p", "p'[v']=")
 
 -- saner behavior of visual mode paste
 map("x", "p", "P")

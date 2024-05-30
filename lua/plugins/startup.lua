@@ -7,7 +7,9 @@ return {
 	-- 		vim.cmd([[colorscheme tokyonight]])
 	-- 	end,
 	-- },
-	{ "catppuccin/nvim",
+	{
+		"catppuccin/nvim",
+		enabled = false,
 		name = "catppuccin",
 		priority = 1000,
 		-- config = function ()
@@ -15,10 +17,20 @@ return {
 		-- end,
 	},
 	{
-		"morhetz/gruvbox",
+		"ellisonleao/gruvbox.nvim",
+		enabled = false,
 		priority = 1000,
 		config = function ()
 			vim.cmd([[colorscheme gruvbox]])
+		end,
+	},
+	{
+		"sainnhe/everforest",
+		priority = 1000,
+		config = function ()
+			vim.g.everforest_enable_italic = true
+			vim.g.everforest_background = 'hard'
+			vim.cmd([[colorscheme everforest]])
 		end,
 	},
 	{

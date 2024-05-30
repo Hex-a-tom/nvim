@@ -4,6 +4,8 @@ return {
 		opts = {
 			options = {
 				globalstatus = true,
+				component_separators = { left = '', right = ''},
+				section_separators = { left = '', right = ''},
 			},
 			sections = {
 				lualine_y = {
@@ -16,8 +18,8 @@ return {
 						cond = function() return package.loaded["noice"] and require("noice").api.status.mode.has() end,
 					},
 					{
-							function() return " " .. require("dap").status() end,
-							cond = function () return package.loaded["dap"] and require("dap").status() ~= "" end,
+						function() return " " .. require("dap").status() end,
+						cond = function () return package.loaded["dap"] and require("dap").status() ~= "" end,
 					},
 					'location',
 				},
@@ -59,18 +61,6 @@ return {
 			"javascript",
 			"html",
 		}
-	},
-	{
-		"b0o/incline.nvim",
-		opts = {
-			window = {
-				margin = {
-					horizontal = 0,
-					vertical = 0,
-				}
-			}
-		},
-		event = "VeryLazy",
 	},
 	{
 		-- TODO: Fix error when exit last non terminal window
