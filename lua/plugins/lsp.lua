@@ -107,7 +107,7 @@ return {
 				auto_install = true,
 
 				-- List of parsers to ignore installing (for "all")
-				ignore_install = { "javascript" },
+				ignore_install = {},
 
 				---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
 				-- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
@@ -144,6 +144,10 @@ return {
 		version = "2.*",
 		build = "make install_jsregexp",
 		lazy = true,
+		config = function ()
+			require("luasnip.loaders.from_vscode").lazy_load({ paths = "./snippets" })
+			require("luasnip.loaders.from_vscode").lazy_load({ exclude = {"rust"}})
+		end,
 		dependencies = {
 			"rafamadriz/friendly-snippets",
 		},
@@ -180,7 +184,6 @@ return {
 			local cmp = require'cmp'
 			local lspkind = require('lspkind')
 
-			require("luasnip.loaders.from_vscode").lazy_load()
 			local luasnip = require("luasnip")
 
 			local has_words_before = function()
@@ -193,6 +196,15 @@ return {
 			lsp_zero.extend_cmp()
 
 			cmp.setup({
+				enabled = function()
+					local context = require("cmp.config.context")
+					if vim.api.nvim_get_mode().mode == 'c' then
+						return true
+					else
+						return not context.in_treesitter_capture("comment")
+						and not context.in_syntax_group("Comment")
+					end
+				end,
 				preselect = cmp.PreselectMode.None,
 				snippet = {
 					-- REQUIRED - you must specify a snippet engine
@@ -352,11 +364,10 @@ return {
 		event = { "BufReadPost", "BufNewFile" },
 		config = true,
 		keys = {
-			{"<leader>xx", "<cmd>TroubleToggle<cr>", desc = "Toggle Touble"},
-			{"<leader>xw", "<cmd>TroubleToggle workspace_diagnostics<cr>", desc = "Workspace Diagnostics"},
-			{"<leader>xd", "<cmd>TroubleToggle document_diagnostics<cr>", desc = "Document Diagnostics"},
-			{"<leader>xq", "<cmd>TroubleToggle quickfix<cr>", desc = "Quickfixes"},
-			{"gR", "<cmd>TroubleToggle lsp_references<cr>", desc = "Lsp References"},
+			{"<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", desc = "Diagnostics"},
+			{"<leader>xq", "<cmd>Trouble quickfix toggle<cr>", desc = "Quickfixes"},
+			{"<leader>xt", "<cmd>Trouble todo toggle<cr>", desc = "Todo"},
+			{"gR", "<cmd>Trouble lsp_references toggle<cr>", desc = "Lsp References"},
 		},
 	},
 }

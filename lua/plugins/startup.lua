@@ -1,12 +1,4 @@
 return {
-	-- {
-	-- 	"folke/tokyonight.nvim",
-	-- 	lazy = false,
-	-- 	priority = 1000,
-	-- 	config = function ()
-	-- 		vim.cmd([[colorscheme tokyonight]])
-	-- 	end,
-	-- },
 	{
 		"catppuccin/nvim",
 		enabled = false,
@@ -39,15 +31,15 @@ return {
 			plugins = { spelling = true },
 			defaults = {
 				mode = { "n", "v" },
-				["<leader>f"] = { name = "+file/find" },
-				["<leader>g"] = { name = "+git" },
-				["<leader>x"] = { name = "+diagnostics/quickfix" },
-				["<leader>c"] = { name = "+comments" },
-				["<leader>l"] = { name = "+lsp" },
-				["<leader>d"] = { name = "+debug" },
-				["<leader>s"] = { name = "+find and replace" },
-				["<leader>b"] = { name = "+buffer" },
-				["<leader>o"] = { name = "+open" },
+				[ "<leader>b"] = { group = "buffer" },
+				[ "<leader>c"] = { group = "comments" },
+				[ "<leader>d"] = { group = "debug" },
+				[ "<leader>f"] = { group = "file/find" },
+				[ "<leader>g"] = { group = "git" },
+				[ "<leader>l"] = { group = "lsp" },
+				[ "<leader>o"] = { group = "open" },
+				[ "<leader>s"] = { group = "find and replace" },
+				[ "<leader>x"] = { group = "diagnostics/quickfix" },
 			},
 		},
 		config = function(_, opts)
