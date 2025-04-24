@@ -1,3 +1,11 @@
+local comp_command="make"
+function run_command()
+	comp_command = vim.fn.input("Compile: ", comp_command)
+	vim.cmd.vsplit()
+	vim.cmd.terminal(comp_command)
+	vim.api.nvim_feedkeys('a', 't', false)
+end
+
 return {
 	{
 		"nvim-lualine/lualine.nvim",
@@ -72,8 +80,9 @@ return {
 			open_mapping = [[<F4>]],
 		},
 		keys = {
-			{"<F4>"},
-			{"<leader>ot", "<cmd>ToggleTerm<cr>", desc = "ToggleTerm"},
+			{"<F4>", "<cmd>1ToggleTerm<cr>"},
+			{"<leader>ot", "<cmd>1ToggleTerm<cr>", desc = "ToggleTerm"},
+			{"<leader>cc", run_command, desc = "Compile"},
 		}
 	},
 	{

@@ -15,10 +15,10 @@ return {
 		cmd = {'LspInfo', 'LspInstall', 'LspStart'},
 		event = {'BufReadPre', 'BufNewFile'},
 		dependencies = {
-			{'hrsh7th/cmp-nvim-lsp'},
+			{'saghen/blink.cmp'},
 			{'williamboman/mason-lspconfig.nvim'},
 		},
-		config = function ()
+		config = function (_, opts)
 			local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
 			for type, icon in pairs(signs) do
 				local hl = "DiagnosticSign" .. type
@@ -39,7 +39,7 @@ return {
 					focus = false,
 					width = 60,
 				},
-				update_in_insert = true,
+				update_in_insert = false,
 				severity_sort = true,
 			})
 
@@ -55,7 +55,7 @@ return {
 			lsp_zero.on_attach(on_attach)
 
 			-- Set up lspconfig.
-			local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+			local capabilities = require('blink.cmp').get_lsp_capabilities()
 
 			require('lspconfig').ccls.setup {
 				capabilities = capabilities,
@@ -162,200 +162,135 @@ return {
 		end,
 	},
 	{
-		"hrsh7th/nvim-cmp",
-		-- load cmp on InsertEnter
-		event = {
-			"InsertEnter",
-			"CmdlineEnter",
-		},
-		-- these dependencies will only be loaded when cmp loads
-		-- dependencies are always lazy-loaded unless specified otherwise
-		dependencies = {
-			"hrsh7th/cmp-nvim-lsp",
-			"hrsh7th/cmp-buffer",
-			"hrsh7th/cmp-path",
-			"hrsh7th/cmp-cmdline",
-			"onsails/lspkind.nvim",
-			"nvim-lspconfig",
-			"LuaSnip",
-			"saadparwaiz1/cmp_luasnip",
-		},
-		config = function()
-			local cmp = require'cmp'
-			local lspkind = require('lspkind')
+		"saghen/blink.cmp",
+		-- optional: provides snippets for the snippet source
+		dependencies = 'LuaSnip',
 
-			local luasnip = require("luasnip")
+		-- use a release tag to download pre-built binaries
+		version = '*',
+		-- AND/OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
+		-- build = 'cargo build --release',
+		-- If you use nix, you can build from source using latest nightly rust with:
+		-- build = 'nix run .#build-plugin',
 
-			local has_words_before = function()
-				unpack = unpack or table.unpack
-				local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-				return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-			end
+		---@module 'blink.cmp'
+		---@type blink.cmp.Config
+		opts = {
+			snippets = { preset = 'luasnip' },
+			-- 'default' for mappings similar to built-in completion
+			-- 'super-tab' for mappings similar to vscode (tab to accept, arrow keys to navigate)
+			-- 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
+			-- See the full "keymap" documentation for information on defining your own keymap.
+			keymap = {
+				preset = 'enter',
+				['<Tab>'] = { 'select_next', 'fallback' },
+				['<S-Tab>'] = { 'select_prev', 'fallback' },
+				['<C-n>'] = { 'snippet_forward', 'fallback' },
+				['<C-p>'] = { 'snippet_backward', 'fallback' },
+			},
 
-			local lsp_zero = require("lsp-zero")
-			lsp_zero.extend_cmp()
-
-			cmp.setup({
-				enabled = function()
-					local context = require("cmp.config.context")
-					if vim.api.nvim_get_mode().mode == 'c' then
-						return true
-					else
-						return not context.in_treesitter_capture("comment")
-						and not context.in_syntax_group("Comment")
-					end
-				end,
-				preselect = cmp.PreselectMode.None,
-				snippet = {
-					-- REQUIRED - you must specify a snippet engine
-					expand = function(args)
-						-- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-						require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-						-- require('snippy').expand_snippet(args.body) -- For `snippy` users.
-						-- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
-					end,
+			cmdline = {
+				keymap = {
+					preset = 'default',
+					['<Tab>'] = { 'select_next', 'fallback' },
+					['<S-Tab>'] = { 'select_prev', 'fallback' },
 				},
-				window = {
-					-- completion = cmp.config.window.bordered(),
-					-- documentation = cmp.config.window.bordered(),
-					completion = {
-						winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
-						col_offset = -3,
-						side_padding = 0,
+				completion = {
+					list = {
+						selection = {
+							preselect = false,
+						}
 					},
-				},
-				mapping = cmp.mapping.preset.insert({
-					['<C-b>'] = cmp.mapping.scroll_docs(-4),
-					['<C-f>'] = cmp.mapping.scroll_docs(4),
-					['<C-Space>'] = cmp.mapping.complete(),
-					['<C-e>'] = cmp.mapping.abort(),
-					['<CR>'] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-					['<Tab>'] = cmp.mapping(function (fallback)
-						if cmp.visible() then
-							cmp.select_next_item()
-							-- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
-							-- they way you will only jump inside the snippet region
-						elseif luasnip.expand_or_locally_jumpable() then
-							luasnip.expand_or_jump()
-						elseif has_words_before() then
-							cmp.complete()
-						else
-							fallback()
-						end
-					end, { "i", "s" }),
-					['<S-Tab>'] = cmp.mapping(function (fallback)
-						if cmp.visible() then
-							cmp.select_prev_item()
-						elseif luasnip.jumpable(-1) then
-							luasnip.jump(-1)
-						else
-							fallback()
-						end
-					end, { "i", "s" }),
-				}),
-				sources = cmp.config.sources({
-					{ name = 'luasnip', priority = 4 }, -- For luasnip users.
-					{ name = 'nvim_lsp' },
-					-- { name = 'vsnip' }, -- For vsnip users.
-					-- { name = 'ultisnips' }, -- For ultisnips users.
-					-- { name = 'snippy' }, -- For snippy users.
-					{ name = "crates" },
-					-- { name = "neorg" },
-				}, {
-					{ name = 'buffer', priority = 0.5 },
-				}),
-				sorting = {
-					comparators = {
-						cmp.config.compare.exact,
-						cmp.config.compare.score,
-						cmp.config.compare.sort_text,
-						cmp.config.compare.recently_used,
-						cmp.config.compare.offset,
-						cmp.config.compare.kind,
-						cmp.config.compare.order,
+					menu = {
+						auto_show = true
+					}
+				}
+			},
+
+			appearance = {
+				-- Sets the fallback highlight groups to nvim-cmp's highlight groups
+				-- Useful for when your theme doesn't support blink.cmp
+				-- Will be removed in a future release
+				use_nvim_cmp_as_default = false,
+				-- Set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
+				-- Adjusts spacing to ensure icons are aligned
+				nerd_font_variant = 'mono'
+			},
+
+			completion = {
+				menu = {
+					draw = {
+						padding = 0,
+						columns = {
+							{ "kind_icon" },
+							{ "label", "label_description", gap = 4 },
+						},
+
+						components = {
+							kind_icon = {
+								text = function(ctx) return " " .. ctx.kind_icon .. ctx.icon_gap .. "  " end,
+							}
+						}
 					}
 				},
-				formatting = {
-					fields = { "kind", "abbr", "menu" },
-					format = function(entry, vim_item)
-						local kind = lspkind.cmp_format({ mode = "symbol_text", maxwidth = 50 })(entry, vim_item)
-						local strings = vim.split(kind.kind, "%s", { trimempty = true })
-						kind.kind = " " .. (strings[1] or "") .. " "
-						kind.menu = "    (" .. (strings[2] or "") .. ")"
-
-						return kind
-					end,
+				list = {
+					selection = { preselect = false, auto_insert = true }
 				},
-			})
-
-			-- Set configuration for specific filetype.
-			cmp.setup.filetype('gitcommit', {
-				sources = cmp.config.sources({
-					{ name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
-				}, {
-					{ name = 'buffer' },
-				})
-			})
-
-			-- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
-			cmp.setup.cmdline('/', {
-				mapping = cmp.mapping.preset.cmdline(),
-				sources = {
-					{ name = 'buffer' }
+				trigger = {
+					show_on_keyword = true,
 				}
-			})
+			},
 
-			-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-			cmp.setup.cmdline(':', {
-				mapping = cmp.mapping.preset.cmdline(),
-				sources = cmp.config.sources({
-					{ name = 'path' }
-				}, {
-					{ name = 'cmdline' }
-				})
-			})
+			-- Default list of enabled providers defined so that you can extend it
+			-- elsewhere in your config, without redefining it, due to `opts_extend`
+			sources = {
+				default = { 'lsp', 'path', 'snippets', 'buffer' },
+			},
+		},
+		opts_extend = { "sources.default" },
+		config = function(_, opts)
+			-- vim.api.nvim_set_hl(0, "PmenuSel", {default = false, bg="#3c3836"})
+			-- vim.api.nvim_set_hl(0, "Pmenu", {default = false, bg="#282828"})
 
-			vim.api.nvim_set_hl(0, "PmenuSel", {default = false, bg="#3c3836"})
-			vim.api.nvim_set_hl(0, "Pmenu", {default = false, bg="#282828"})
+			-- vim.api.nvim_set_hl(0, "CmpItemAbbrDeprecated", {default = false, fg = "#7E8294", strikethrough = true})
+			-- vim.api.nvim_set_hl(0, "CmpItemAbbrMatch", {default = false, fg = "#82AAFF",  bold = true})
+			-- vim.api.nvim_set_hl(0, "CmpItemAbbrMatchFuzzy", {default = false, fg = "#82AAFF", bold = true})
+			-- vim.api.nvim_set_hl(0, "CmpItemMenu", {default = false, fg = "#C792EA", italic = true})
 
-			vim.api.nvim_set_hl(0, "CmpItemAbbrDeprecated", {default = false, fg = "#7E8294", strikethrough = true})
-			vim.api.nvim_set_hl(0, "CmpItemAbbrMatch", {default = false, fg = "#82AAFF",  bold = true})
-			vim.api.nvim_set_hl(0, "CmpItemAbbrMatchFuzzy", {default = false, fg = "#82AAFF", bold = true})
-			vim.api.nvim_set_hl(0, "CmpItemMenu", {default = false, fg = "#C792EA", italic = true})
+			vim.api.nvim_set_hl(0, "BlinkCmpKindField", {default = false, fg = "#EED8DA", bg = "#B5585F"})
+			vim.api.nvim_set_hl(0, "BlinkCmpKindProperty", {default = false, fg = "#EED8DA", bg = "#B5585F"})
+			vim.api.nvim_set_hl(0, "BlinkCmpKindEvent", {default = false, fg = "#EED8DA", bg = "#B5585F"})
 
-			vim.api.nvim_set_hl(0, "CmpItemKindField", {default = false, fg = "#EED8DA", bg = "#B5585F"})
-			vim.api.nvim_set_hl(0, "CmpItemKindProperty", {default = false, fg = "#EED8DA", bg = "#B5585F"})
-			vim.api.nvim_set_hl(0, "CmpItemKindEvent", {default = false, fg = "#EED8DA", bg = "#B5585F"})
+			vim.api.nvim_set_hl(0, "BlinkCmpKindText", {default = false, fg = "#C3E88D", bg = "#9FBD73"})
+			vim.api.nvim_set_hl(0, "BlinkCmpKindEnum", {default = false, fg = "#C3E88D", bg = "#9FBD73"})
+			vim.api.nvim_set_hl(0, "BlinkCmpKindKeyword", {default = false, fg = "#C3E88D", bg = "#9FBD73"})
 
-			vim.api.nvim_set_hl(0, "CmpItemKindText", {default = false, fg = "#C3E88D", bg = "#9FBD73"})
-			vim.api.nvim_set_hl(0, "CmpItemKindEnum", {default = false, fg = "#C3E88D", bg = "#9FBD73"})
-			vim.api.nvim_set_hl(0, "CmpItemKindKeyword", {default = false, fg = "#C3E88D", bg = "#9FBD73"})
+			vim.api.nvim_set_hl(0, "BlinkCmpKindConstant", {default = false, fg = "#FFE082", bg = "#D4BB6C"})
+			vim.api.nvim_set_hl(0, "BlinkCmpKindConstructor", {default = false, fg = "#FFE082", bg = "#D4BB6C"})
+			vim.api.nvim_set_hl(0, "BlinkCmpKindReference", {default = false, fg = "#FFE082", bg = "#D4BB6C"})
 
-			vim.api.nvim_set_hl(0, "CmpItemKindConstant", {default = false, fg = "#FFE082", bg = "#D4BB6C"})
-			vim.api.nvim_set_hl(0, "CmpItemKindConstructor", {default = false, fg = "#FFE082", bg = "#D4BB6C"})
-			vim.api.nvim_set_hl(0, "CmpItemKindReference", {default = false, fg = "#FFE082", bg = "#D4BB6C"})
+			vim.api.nvim_set_hl(0, "BlinkCmpKindFunction", {default = false, fg = "#EADFF0", bg = "#A377BF"})
+			vim.api.nvim_set_hl(0, "BlinkCmpKindStruct", {default = false, fg = "#EADFF0", bg = "#A377BF"})
+			vim.api.nvim_set_hl(0, "BlinkCmpKindClass", {default = false, fg = "#EADFF0", bg = "#A377BF"})
+			vim.api.nvim_set_hl(0, "BlinkCmpKindModule", {default = false, fg = "#EADFF0", bg = "#A377BF"})
+			vim.api.nvim_set_hl(0, "BlinkCmpKindOperator", {default = false, fg = "#EADFF0", bg = "#A377BF"})
 
-			vim.api.nvim_set_hl(0, "CmpItemKindFunction", {default = false, fg = "#EADFF0", bg = "#A377BF"})
-			vim.api.nvim_set_hl(0, "CmpItemKindStruct", {default = false, fg = "#EADFF0", bg = "#A377BF"})
-			vim.api.nvim_set_hl(0, "CmpItemKindClass", {default = false, fg = "#EADFF0", bg = "#A377BF"})
-			vim.api.nvim_set_hl(0, "CmpItemKindModule", {default = false, fg = "#EADFF0", bg = "#A377BF"})
-			vim.api.nvim_set_hl(0, "CmpItemKindOperator", {default = false, fg = "#EADFF0", bg = "#A377BF"})
+			vim.api.nvim_set_hl(0, "BlinkCmpKindVariable", {default = false, fg = "#C5CDD9", bg = "#7E8294"})
+			vim.api.nvim_set_hl(0, "BlinkCmpKindFile", {default = false, fg = "#C5CDD9", bg = "#7E8294"})
 
-			vim.api.nvim_set_hl(0, "CmpItemKindVariable", {default = false, fg = "#C5CDD9", bg = "#7E8294"})
-			vim.api.nvim_set_hl(0, "CmpItemKindFile", {default = false, fg = "#C5CDD9", bg = "#7E8294"})
+			vim.api.nvim_set_hl(0, "BlinkCmpKindUnit", {default = false, fg = "#F5EBD9", bg = "#D4A959"})
+			vim.api.nvim_set_hl(0, "BlinkCmpKindSnippet", {default = false, fg = "#F5EBD9", bg = "#D4A959"})
+			vim.api.nvim_set_hl(0, "BlinkCmpKindFolder", {default = false, fg = "#F5EBD9", bg = "#D4A959"})
 
-			vim.api.nvim_set_hl(0, "CmpItemKindUnit", {default = false, fg = "#F5EBD9", bg = "#D4A959"})
-			vim.api.nvim_set_hl(0, "CmpItemKindSnippet", {default = false, fg = "#F5EBD9", bg = "#D4A959"})
-			vim.api.nvim_set_hl(0, "CmpItemKindFolder", {default = false, fg = "#F5EBD9", bg = "#D4A959"})
+			vim.api.nvim_set_hl(0, "BlinkCmpKindMethod", {default = false, fg = "#DDE5F5", bg = "#6C8ED4"})
+			vim.api.nvim_set_hl(0, "BlinkCmpKindValue", {default = false, fg = "#DDE5F5", bg = "#6C8ED4"})
+			vim.api.nvim_set_hl(0, "BlinkCmpKindEnumMember", {default = false, fg = "#DDE5F5", bg = "#6C8ED4"})
 
-			vim.api.nvim_set_hl(0, "CmpItemKindMethod", {default = false, fg = "#DDE5F5", bg = "#6C8ED4"})
-			vim.api.nvim_set_hl(0, "CmpItemKindValue", {default = false, fg = "#DDE5F5", bg = "#6C8ED4"})
-			vim.api.nvim_set_hl(0, "CmpItemKindEnumMember", {default = false, fg = "#DDE5F5", bg = "#6C8ED4"})
+			vim.api.nvim_set_hl(0, "BlinkCmpKindInterface", {default = false, fg = "#D8EEEB", bg = "#58B5A8"})
+			vim.api.nvim_set_hl(0, "BlinkCmpKindColor", {default = false, fg = "#D8EEEB", bg = "#58B5A8"})
+			vim.api.nvim_set_hl(0, "BlinkCmpKindTypeParameter", {default = false, fg = "#D8EEEB", bg = "#58B5A8"})
 
-			vim.api.nvim_set_hl(0, "CmpItemKindInterface", {default = false, fg = "#D8EEEB", bg = "#58B5A8"})
-			vim.api.nvim_set_hl(0, "CmpItemKindColor", {default = false, fg = "#D8EEEB", bg = "#58B5A8"})
-			vim.api.nvim_set_hl(0, "CmpItemKindTypeParameter", {default = false, fg = "#D8EEEB", bg = "#58B5A8"})
-
+			require("blink.cmp").setup(opts)
 		end,
 	},
 	{

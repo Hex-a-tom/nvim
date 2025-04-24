@@ -28,8 +28,10 @@ return {
 		},
 	},
 	{
-		"TimUntersberger/neogit",
+		"NeogitOrg/neogit",
 		opts = {
+			-- FIXME: this is temporary and can be removed when it is fixed
+			disable_signs = true,
 			disable_commit_confirmation = true,
 			integrations = {
 				-- Neogit only provides inline diffs. If you want a more traditional way to look at diffs, you can use `sindrets/diffview.nvim`.

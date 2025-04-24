@@ -1,41 +1,55 @@
 return {
-	{
-		"simrat39/rust-tools.nvim",
-		ft = {
-			"rust",
-			"toml",
-		},
-		config = function ()
-			local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+	-- {
+	-- 	"mrcjkb/rustaceanvim",
+	-- 	ft = {
+	-- 		"rust",
+	-- 		"toml",
+	-- 	},
+	-- 	config = function ()
+	-- 	-- 	local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
-			local rt = require("rust-tools")
+	-- 	-- 	local rt = require("rust-tools")
 
-			rt.setup({
-				tools = {
-					executor = require("rust-tools.executors").toggleterm,
-				},
-				on_initialized = function(health)
-					vim.notify("Started rust-analyzer with status: " .. health)
-				end,
-				server = {
-					on_attach = function(_, bufnr)
-						-- Hover actions
-						vim.keymap.set("n", "<leader>ll", rt.hover_actions.hover_actions, { buffer = bufnr })
-						-- Code action groups
-						vim.keymap.set("n", "<Leader>la", rt.code_action_group.code_action_group, { buffer = bufnr })
-						vim.keymap.set("n", "<Leader>lR", "<cmd>RustRunnables<cr>", { buffer = bufnr, desc = "Run" })
-						vim.keymap.set("n", "<Leader>lc", rt.open_cargo_toml.open_cargo_toml, { buffer = bufnr, desc = "Open Config" })
-						vim.keymap.set("n", "<Leader>ls", "<cmd>!rustup doc std<cr><cr>", { buffer = bufnr, desc = "Std Documentation", silent = true })
-						vim.keymap.set("n", "<Leader>lD", '<cmd>!xdg-open "https://docs.rs/"<cr><cr>', { buffer = bufnr, desc = "Documentation", silent = true })
-					end,
-					capabilities = capabilities,
-				},
-			})
-		end,
-		dependencies = {
-			"nvim-cmp",
-		}
-	},
+	-- 	-- 	rt.setup({
+	-- 	-- 		tools = {
+	-- 	-- 			executor = require("rust-tools.executors").toggleterm,
+	-- 	-- 		},
+	-- 	-- 		on_initialized = function(health)
+	-- 	-- 			vim.notify("Started rust-analyzer with status: " .. health)
+	-- 	-- 		end,
+	-- 	-- 		server = {
+	-- 	-- 			on_attach = function(_, bufnr)
+	-- 	-- 				-- Hover actions
+	-- 	-- 				vim.keymap.set("n", "<leader>cl", rt.hover_actions.hover_actions, { buffer = bufnr })
+	-- 	-- 				-- Code action groups
+	-- 	-- 				vim.keymap.set("n", "<Leader>ca", rt.code_action_group.code_action_group, { buffer = bufnr })
+	-- 	-- 				vim.keymap.set("n", "<Leader>cR", "<cmd>RustRunnables<cr>", { buffer = bufnr, desc = "Run" })
+	-- 	-- 				vim.keymap.set("n", "<Leader>cc", rt.open_cargo_toml.open_cargo_toml, { buffer = bufnr, desc = "Open Config" })
+	-- 	-- 				vim.keymap.set("n", "<Leader>cs", "<cmd>!rustup doc std<cr><cr>", { buffer = bufnr, desc = "Std Documentation", silent = true })
+	-- 	-- 				vim.keymap.set("n", "<Leader>cD", '<cmd>!xdg-open "https://docs.rs/"<cr><cr>', { buffer = bufnr, desc = "Documentation", silent = true })
+	-- 	-- 			end,
+	-- 	-- 			capabilities = capabilities,
+	-- 	-- 		},
+	-- 	-- 	})
+	-- 		vim.g.rustaceanvim = {
+	-- 			server = {
+	-- 				on_attach = function(client, bufnr)
+	-- 					-- Hover actions
+	-- 					vim.keymap.set("n", "<leader>cl", "<cmd>RustLsp hover actions<cr>", { buffer = bufnr })
+	-- 					-- Code action groups
+	-- 					vim.keymap.set("n", "<Leader>ca", "<cmd>RustLsp codeAction<cr>", { buffer = bufnr })
+	-- 					vim.keymap.set("n", "<Leader>cR", "<cmd>RustLsp runnables<cr>", { buffer = bufnr, desc = "Run" })
+	-- 					-- vim.keymap.set("n", "<Leader>cc", rt.open_cargo_toml.open_cargo_toml, { buffer = bufnr, desc = "Open Config" })
+	-- 					vim.keymap.set("n", "<Leader>cs", "<cmd>!rustup doc std<cr><cr>", { buffer = bufnr, desc = "Std Documentation", silent = true })
+	-- 					vim.keymap.set("n", "<Leader>cD", '<cmd>!xdg-open "https://docs.rs/"<cr><cr>', { buffer = bufnr, desc = "Documentation", silent = true })
+	-- 				end,
+	-- 			}
+	-- 		}
+	-- 	end,
+	-- 	-- dependencies = {
+	-- 	-- 	"nvim-cmp",
+	-- 	-- }
+	-- },
 	{
 		"saecki/crates.nvim",
 		event = { "BufRead Cargo.toml" },
