@@ -6,6 +6,9 @@ local function map(mode, lhs, rhs, opts)
 	vim.keymap.set(mode, lhs, rhs, opts)
 end
 
+-- Folding
+map("n", "<Tab>", "za")
+
 -- Resize window using <ctrl> arrow keys
 map("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase window height" })
 map("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease window height" })
@@ -61,6 +64,7 @@ map("v", ">", ">gv")
 map("x", "p", "P")
 
 -- multible cursor emulation
+-- TODO: this might be broken
 map("n", "c*", "*``cgn")
 map("n", "c#", "#``cgn")
 

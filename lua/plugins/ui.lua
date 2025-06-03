@@ -1,11 +1,3 @@
-local comp_command="make"
-function run_command()
-	comp_command = vim.fn.input("Compile: ", comp_command)
-	vim.cmd.vsplit()
-	vim.cmd.terminal(comp_command)
-	vim.api.nvim_feedkeys('a', 't', false)
-end
-
 return {
 	{
 		"nvim-lualine/lualine.nvim",
@@ -82,7 +74,6 @@ return {
 		keys = {
 			{"<F4>", "<cmd>1ToggleTerm<cr>"},
 			{"<leader>ot", "<cmd>1ToggleTerm<cr>", desc = "ToggleTerm"},
-			{"<leader>cc", run_command, desc = "Compile"},
 		}
 	},
 	{
@@ -177,6 +168,8 @@ return {
 			{"<leader>xW", "<cmd>Telescope diagnostics<cr>", desc = "Workspace diagnostics" },
 			{"<leader>fm", "<cmd>Telescope marks<cr>", desc = "Jump to Mark" },
 			{"<leader>fr", "<cmd>Telescope resume<cr>", desc = "Resume" },
+			{"<leader>ls", "<cmd>Telescope lsp_document_symbols<cr>", desc = "Document Symbols" },
+			{"<leader>lw", "<cmd>Telescope lsp_workspace_symbols<cr>", desc = "Workspace Symbols" },
 		},
 		dependencies = {
 			"BurntSushi/ripgrep",

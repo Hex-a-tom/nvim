@@ -15,7 +15,7 @@ require('config')
 
 vim.cmd([[
 if exists("g:neovide")
-	set guifont=ZedMono\ Nerd\ Font:h12:#h-slight
+	set guifont=Iosevka\ Nerd\ Font:h11.6:#h-slight:#e-subpixelantialias
 	" set linespace=-1
 	"let g:neovide_scroll_animation_length = 2.0
 endif

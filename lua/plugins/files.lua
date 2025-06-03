@@ -68,7 +68,7 @@ return {
 						glyphs = {
 							git = {
 								unstaged = "✖",
-								staged = "",
+								staged = "✔",
 								untracked = "",
 								ignored = "",
 								renamed = "",

@@ -17,10 +17,41 @@ return {
 		end
 	},
 	{
+		dir = vim.fn.stdpath("config") .. "/compile",
+		dependencies = {
+			"telescope.nvim"
+		},
+		opts = {
+			commands = {
+				"cargo run",
+				"cargo build",
+			}
+		},
+		cmd = "RunCommand",
+		keys = {
+			{
+				"<leader>cc",
+				function ()
+					require("compile").picker()
+				end,
+				desc = "Run Command",
+				silent = true
+			}
+		}
+	},
+	{
+		"dhruvasagar/vim-table-mode",
+	},
+	{
 		"ggandor/leap.nvim",
 		config = function ()
-			require('leap').add_default_mappings()
+			require('leap').set_default_mappings()
 		end
+	},
+	{
+	"chentoast/marks.nvim",
+	event = "VeryLazy",
+	opts = {},
 	},
 	{
 		"kylechui/nvim-surround",
@@ -141,7 +172,7 @@ return {
 		"lukas-reineke/indent-blankline.nvim",
 		main = "ibl",
 		opts = {
-			indent = { char = "▎", tab_char = "▎" },
+			indent = { char = "▏", tab_char = "▏" },
 			scope = { enabled = false }
 		},
 		event = "VeryLazy",
@@ -155,18 +186,18 @@ return {
 		"numToStr/Comment.nvim",
 		opts = {
 			ignore = '^$',
-			toggler = {
-				line = '<leader>cc',
-				block = '<leader>cb',
-			},
+			-- toggler = {
+			-- 	line = '<leader>cc',
+			-- 	block = '<leader>cb',
+			-- },
 			mappings = {
 				basic = true,
 				extra = false,
 			},
 		},
 		keys = {
-			{"<leader>cc", desc = "Toggle Line Comment"},
-			{"<leader>cb", desc = "Toggle Block Comment"},
+			-- {"<leader>cc", desc = "Toggle Line Comment"},
+			-- {"<leader>cb", desc = "Toggle Block Comment"},
 		},
 		event = "VeryLazy"
 	},
