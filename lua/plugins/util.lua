@@ -103,10 +103,6 @@ return {
 				Rule('r#"', '"#', {"rust", "rs"})
 			})
 
-			npairs.add_rules({
-				Rule('<', '>', {"rust", "rs"})
-			})
-
 			local brackets = { { '(', ')' }, { '[', ']' }, { '{', '}' } }
 			npairs.add_rules {
 				-- Rule for a pair with left-side ' ' and right side ' '
@@ -172,8 +168,9 @@ return {
 		"lukas-reineke/indent-blankline.nvim",
 		main = "ibl",
 		opts = {
-			indent = { char = "▏", tab_char = "▏" },
-			scope = { enabled = false }
+			indent = { char = "▏", tab_char = "▏"},
+			scope = { enabled = false },
+			whitespace = { highlight = { "Whitespace", "NonText" } },
 		},
 		event = "VeryLazy",
 	},

@@ -14,6 +14,7 @@ opt.completeopt = "menu,menuone,noselect"
 opt.conceallevel = 3 -- Hide * markup for bold and italic
 opt.confirm = true -- Confirm to save changes before exiting modified buffer
 opt.cursorline = true -- Enable highlighting of the current line
+opt.expandtab = true
 opt.foldlevel = 20
 opt.foldmethod = "indent"
 opt.formatoptions = "jcroqlnt" -- tcqj
@@ -23,6 +24,16 @@ opt.ignorecase = true -- Ignore case
 opt.inccommand = "nosplit" -- preview incremental substitute
 opt.laststatus = 3
 opt.list = true -- Show some invisible characters (tabs...
+vim.opt.listchars = {
+    space = "⋅",
+    -- eol = "↴",
+    tab = "▏ ",
+    -- tab = ">.",
+    trail = "•",
+    extends = "❯",
+    precedes = "❮",
+    nbsp = "",
+}
 opt.mouse = "a" -- Enable mouse mode
 opt.number = true -- Print line number
 opt.numberwidth = 2
@@ -33,6 +44,7 @@ opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize" }
 opt.shiftround = true -- Round indent
 opt.shiftwidth = 4
 opt.shortmess:append({ W = true, I = true, c = true })
+opt.showbreak = "↳⋅"
 opt.showmode = false -- Dont show mode since we have a statusline
 opt.sidescrolloff = 8 -- Columns of context
 opt.signcolumn = "yes" -- Always show the signcolumn, otherwise it would shift the text each time
@@ -42,7 +54,7 @@ opt.smarttab = true
 opt.spelllang = { "en" }
 opt.splitbelow = true -- Put new windows below current
 opt.splitright = true -- Put new windows right of current
-opt.statuscolumn = "%s%=%{v:relnum?v:relnum:v:lnum} "
+-- opt.statuscolumn = "%s%=%{v:relnum?v:relnum:v:lnum} "
 opt.tabstop = 4
 opt.softtabstop = 4
 opt.termguicolors = true -- True color support
