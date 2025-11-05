@@ -194,10 +194,11 @@ return {
 			},
 
 			cmdline = {
+                enabled = true,
 				keymap = {
-					preset = 'default',
-					['<Tab>'] = { 'select_next', 'fallback' },
-					['<S-Tab>'] = { 'select_prev', 'fallback' },
+					preset = 'cmdline',
+					-- ['<Tab>'] = { 'select_next', 'fallback' },
+					-- cmdlineS-Tab>'] = { 'select_prev', 'fallback' },
 				},
 				completion = {
 					list = {
@@ -222,7 +223,7 @@ return {
 				use_nvim_cmp_as_default = false,
 				-- Set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
 				-- Adjusts spacing to ensure icons are aligned
-				nerd_font_variant = 'mono'
+				nerd_font_variant = 'normal'
 			},
 
 			completion = {
@@ -231,12 +232,12 @@ return {
 						padding = 0,
 						columns = {
 							{ "kind_icon" },
-							{ "label", "label_description", gap = 4 },
+							{ "label", "label_description", gap = 3 },
 						},
 
 						components = {
 							kind_icon = {
-								text = function(ctx) return " " .. ctx.kind_icon .. ctx.icon_gap .. "  " end,
+								text = function(ctx) return " " .. ctx.kind_icon .. ctx.icon_gap .. " " end,
 							}
 						}
 					}

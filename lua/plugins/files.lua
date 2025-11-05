@@ -65,14 +65,15 @@ return {
 				},
 				renderer = {
 					icons = {
+                        symlink_arrow = "   ",
 						glyphs = {
 							git = {
-								unstaged = "✖",
-								staged = "✔",
-								untracked = "",
-								ignored = "",
+								unstaged = "",
+								staged = "",
+								untracked = "󰝦",
+								ignored = "",
 								renamed = "",
-								deleted = "",
+								deleted = "󰛲",
 								unmerged = "",
 							},
 						},

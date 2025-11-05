@@ -13,12 +13,8 @@ vim.opt.rtp:prepend(lazypath)
 
 require('config')
 
-vim.cmd([[
-if exists("g:neovide")
-	set guifont=Google\ Sans\ Code:h11:#h-full
-	" set linespace=-1
-	"let g:neovide_scroll_animation_length = 2.0
-endif
-]])
+if vim.g.neovide then
+    vim.o.guifont="GoogleSansCode Nerd Font Propo,Google Sans Code,ZedMono Nerd Font Propo,Iosevka Nerd Font Propo:h11:#h-slight"
+end
 
 require("lazy").setup("plugins")
