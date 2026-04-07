@@ -19,11 +19,12 @@ return {
 			{'williamboman/mason-lspconfig.nvim'},
 		},
 		config = function (_, opts)
-			local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
-			for type, icon in pairs(signs) do
-				local hl = "DiagnosticSign" .. type
-				vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-			end
+			-- local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+			-- for type, icon in pairs(signs) do
+			-- 	local hl = "DiagnosticSign" .. type
+			-- 	-- vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+            --  -- vim.diagnostic.config({ text = icon, texthl = hl, numhl = hl }, hl)
+			-- end
 
 			vim.diagnostic.config({
 				underline = true,
@@ -57,7 +58,7 @@ return {
 			-- Set up lspconfig.
 			local capabilities = require('blink.cmp').get_lsp_capabilities()
 
-			require('lspconfig').ccls.setup {
+			vim.lsp.config("ccls", {
 				capabilities = capabilities,
 				init_options = {
 					compilationDatabaseDirectory = "build";
@@ -69,12 +70,14 @@ return {
 					};
 				},
 				on_attach = on_attach,
-			}
+			})
+            vim.lsp.enable('ccls')
 
-			require('lspconfig').rust_analyzer.setup {
+			vim.lsp.config("rust_analyzer", {
 				capabilities = capabilities,
 				on_attach = on_attach,
-			}
+			})
+            vim.lsp.enable('rust_analyzer')
 
 			require("mason-lspconfig").setup({
 				ensure_installed = {},

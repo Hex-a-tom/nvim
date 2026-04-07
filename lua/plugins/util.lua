@@ -43,9 +43,10 @@ return {
 		"dhruvasagar/vim-table-mode",
 	},
 	{
-		"ggandor/leap.nvim",
+		"https://codeberg.org/andyg/leap.nvim",
 		config = function ()
-			require('leap').set_default_mappings()
+            vim.keymap.set({ 'n', 'x', 'o' }, 's', '<Plug>(leap)')
+            vim.keymap.set('n', 'S', '<Plug>(leap-from-window)')
 		end
 	},
 	{
@@ -67,12 +68,31 @@ return {
 		"tpope/vim-repeat",
 	},
 	{
-		"ahmedkhalf/project.nvim",
-		main = "project_nvim",
+		"DrKJeff16/project.nvim",
+        dependencies = {
+            'telescope.nvim'
+        },
 		opts = {
 			silent_chdir = false,
 		},
-		event = "VeryLazy",
+        cmd = { -- Lazy-load by commands
+            'Project',
+            'ProjectAdd',
+            'ProjectConfig',
+            'ProjectDelete',
+            'ProjectExport',
+            'ProjectHealth',
+            'ProjectHistory',
+            'ProjectImport',
+            'ProjectRecents',
+            'ProjectRoot',
+            'ProjectSession',
+            'ProjectTelescope', -- If using `telescope.nvim` integration
+        },
+        config = function()
+            require('project').setup()
+            require('telescope').load_extension('projects')
+        end
 	},
 	{
 		"AckslD/nvim-neoclip.lua",

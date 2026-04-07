@@ -31,21 +31,21 @@ return {
 			plugins = { spelling = true },
 			defaults = {
 				mode = { "n", "v" },
-				[ "<leader>b"] = { group = "buffer" },
-				[ "<leader>c"] = { group = "comments" },
-				[ "<leader>d"] = { group = "debug" },
-				[ "<leader>f"] = { group = "file/find" },
-				[ "<leader>g"] = { group = "git" },
-				[ "<leader>l"] = { group = "lsp" },
-				[ "<leader>o"] = { group = "open" },
-				[ "<leader>s"] = { group = "find and replace" },
-				[ "<leader>x"] = { group = "diagnostics/quickfix" },
+                { "<leader>b", group = "buffer" },
+                { "<leader>c", group = "comments" },
+                { "<leader>d", group = "debug" },
+                { "<leader>f", group = "file/find" },
+                { "<leader>g", group = "git" },
+                { "<leader>l", group = "lsp" },
+                { "<leader>o", group = "open" },
+                { "<leader>s", group = "find and replace" },
+                { "<leader>x", group = "diagnostics/quickfix" },
 			},
 		},
 		config = function(_, opts)
 			local wk = require("which-key")
 			wk.setup(opts)
-			wk.register(opts.defaults)
+			wk.add(opts.defaults)
 		end,
 	},
 	{ "nvim-tree/nvim-web-devicons", lazy = true },
@@ -56,7 +56,7 @@ return {
 
 			startify.section.top_buttons.val = {
 				startify.button( "e", "New file" , ":ene <BAR> startinsert <CR>"),
-				startify.button( "p", "Load project", ":Telescope projects<CR>")
+				startify.button( "p", "Load project", ":ProjectTelescope<CR>")
 			}
 
 			startify.mru_opts.autocd = true

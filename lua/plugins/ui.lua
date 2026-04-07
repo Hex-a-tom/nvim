@@ -160,7 +160,7 @@ return {
 			{"<leader>fo", "<cmd>Telescope oldfiles<cr>", desc = "Oldfiles"},
 			{"<leader>ft", "<cmd>TodoTelescope<cr>", desc = "Todo"},
 			{"<leader>p", "<cmd>Telescope neoclip<cr>", desc = "Neoclip"},
-			{"<leader>fp", "<cmd>Telescope projects<cr>", desc = "Projects"},
+			{"<leader>fp", "<cmd>ProjectTelescope<cr>", desc = "Projects"},
 			{"<leader>:", "<cmd>Telescope command_history<cr>", desc = "Command History" },
 			{"<leader>bi", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
 			{"<leader>fa", "<cmd>Telescope autocommands<cr>", desc = "Auto Commands" },
@@ -200,7 +200,6 @@ return {
 				}
 			}
 
-			telescope.load_extension('projects')
 			telescope.load_extension('neoclip')
 			telescope.load_extension "file_browser"
 			telescope.load_extension("ui-select")

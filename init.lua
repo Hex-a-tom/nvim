@@ -14,7 +14,7 @@ vim.opt.rtp:prepend(lazypath)
 require('config')
 
 if vim.g.neovide then
-    vim.o.guifont="GoogleSansCode Nerd Font Propo,Google Sans Code,ZedMono Nerd Font Propo,Iosevka Nerd Font Propo:h11:#h-slight"
+    vim.o.guifont="Liga GoogleSansCode Nerd Font Propo,GoogleSansCode Nerd Font Propo,Google Sans Code,ZedMono Nerd Font Propo,Iosevka Nerd Font Propo:h11:#h-slight"
 end
 
 require("lazy").setup("plugins")
